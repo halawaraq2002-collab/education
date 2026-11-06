@@ -1,16 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, googleAuthProvider, db, handleFirestoreError, OperationType } from '../lib/firebase';
-import { UserProfile } from '../types';
+import { UserProfile, Course } from '../types';
+import { initialCourses } from '../data/coursesData';
+import { translations, Language } from '../lib/translations';
 
 interface AuthContextType {
   user: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
   isAdmin: boolean;
-  language: 'ar' | 'en';
-  setLanguage: (lang: 'ar' | 'en') => void;
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: keyof typeof translations.ar) => string;
+  courses: Course[];
+  addCourse: (course: Course) => Promise<void>;
+  deleteCourse: (courseId: string) => Promise<void>;
+  updateCourse: (course: Course) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOutUser: () => Promise<void>;
   loginAsDemoStudent: () => void;
@@ -56,8 +63,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(defaultDemoStudent);
   const [loading, setLoading] = useState<boolean>(true);
-  const [language, setLanguage] = useState<'ar' | 'en'>('ar');
+  const [language, setLanguageState] = useState<Language>('ar');
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
 
+  // Sync document direction and language on language change
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  };
+
+  useEffect(() => {
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, [language]);
+
+  // Load custom courses from Firestore if available
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'courses'));
+        if (!querySnapshot.empty) {
+          const firestoreCourses: Course[] = [];
+          querySnapshot.forEach((docSnap) => {
+            firestoreCourses.push(docSnap.data() as Course);
+          });
+          // Merge with initialCourses (avoid duplicates)
+          const merged = [...initialCourses];
+          firestoreCourses.forEach((fc) => {
+            const idx = merged.findIndex((m) => m.id === fc.id);
+            if (idx >= 0) {
+              merged[idx] = fc;
+            } else {
+              merged.push(fc);
+            }
+          });
+          setCourses(merged);
+        }
+      } catch (e) {
+        console.warn('Note: using local initial courses', e);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  // Sync auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -73,7 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const newProfile: UserProfile = {
               uid: currentUser.uid,
               email: currentUser.email || '',
-              displayName: currentUser.displayName || 'طالب أكاديمي',
+              displayName: currentUser.displayName || (language === 'ar' ? 'طالب أكاديمي' : 'Academic Scholar'),
               role: isAdminEmail ? 'admin' : 'student',
               academicId: `STU-${Math.floor(100000 + Math.random() * 900000)}`,
               university: 'جامعة المستقبل الأهلية',
@@ -90,7 +140,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         } catch (error) {
           console.warn('Firestore profile load note:', error);
-          // Fallback to local profile based on auth
           setUserProfile({
             uid: currentUser.uid,
             email: currentUser.email || '',
@@ -106,14 +155,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           });
         }
       } else {
-        // Keep demo student logged in for easy testability if no real session
         setUserProfile(prev => prev ?? defaultDemoStudent);
       }
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [language]);
 
   const signInWithGoogle = async () => {
     try {
@@ -137,6 +185,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginAsDemoAdmin = () => {
     setUser(null);
     setUserProfile(defaultDemoAdmin);
+  };
+
+  const addCourse = async (course: Course) => {
+    setCourses((prev) => [course, ...prev.filter((c) => c.id !== course.id)]);
+    try {
+      await setDoc(doc(db, 'courses', course.id), course);
+    } catch (e) {
+      console.warn('Course saved to local state:', e);
+    }
+  };
+
+  const deleteCourse = async (courseId: string) => {
+    setCourses((prev) => prev.filter((c) => c.id !== courseId));
+    try {
+      await deleteDoc(doc(db, 'courses', courseId));
+    } catch (e) {
+      console.warn('Course deleted from local state:', e);
+    }
+  };
+
+  const updateCourse = async (course: Course) => {
+    setCourses((prev) => prev.map((c) => (c.id === course.id ? course : c)));
+    try {
+      await setDoc(doc(db, 'courses', course.id), course, { merge: true });
+    } catch (e) {
+      console.warn('Course updated in local state:', e);
+    }
   };
 
   const enrollCourse = async (courseId: string) => {
@@ -209,6 +284,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isAdmin = userProfile?.role === 'admin';
 
+  const t = (key: keyof typeof translations.ar): string => {
+    const val = translations[language][key];
+    if (typeof val === 'string') return val;
+    return String(val || key);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -218,6 +299,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAdmin,
         language,
         setLanguage,
+        t,
+        courses,
+        addCourse,
+        deleteCourse,
+        updateCourse,
         signInWithGoogle,
         signOutUser,
         loginAsDemoStudent,

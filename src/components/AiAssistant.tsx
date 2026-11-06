@@ -1,18 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { 
   Sparkles, 
   Send, 
-  HelpCircle, 
   AlertTriangle, 
   Lightbulb, 
   Wrench, 
   BookOpen, 
   X, 
-  RotateCcw,
-  Bot,
-  User,
-  Copy,
-  Check
+  Bot, 
+  User, 
+  Copy, 
+  Check 
 } from 'lucide-react';
 
 interface AiAssistantProps {
@@ -41,13 +40,14 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
   lessonContext,
   onClose,
 }) => {
+  const { language, t } = useAuth();
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       sender: 'ai',
-      text: `أهلاً بك يا بطل! 👋 أنا مرشدك الأكاديمي الذكي في تطوير الويب.
-سواء كنت تبحث عن تلميح للحل دون حرق التمرين، أو تواجه خطأ برمجياً محيراً، أو تود فهم كود معين بالتفصيل، أنا هنا لمساعدتك خطوة بخطوة.`,
-      timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+      text: t('aiWelcomeMessage'),
+      timestamp: new Date().toLocaleTimeString(language === 'ar' ? 'ar-SA' : 'en-US', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [inputText, setInputText] = useState('');
@@ -68,11 +68,12 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
     const textToSend = promptText || inputText;
     if (!textToSend.trim() && mode === 'chat') return;
 
+    const locale = language === 'ar' ? 'ar-SA' : 'en-US';
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
       text: textToSend || getModeLabel(mode),
-      timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
     };
 
     setMessages((prev) => [...prev, userMsg]);
@@ -88,11 +89,12 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           mode,
           prompt: textToSend,
           lessonContext,
+          language,
         }),
       });
 
       const data = await response.json();
-      const aiReply = data.reply || data.error || 'عذراً، حدث خطأ أثناء معالجة الرد البرمجي.';
+      const aiReply = data.reply || data.error || (language === 'ar' ? 'عذراً، حدث خطأ أثناء معالجة الرد البرمجي.' : 'Sorry, an error occurred while processing the response.');
 
       setMessages((prev) => [
         ...prev,
@@ -100,18 +102,21 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           id: `ai-${Date.now()}`,
           sender: 'ai',
           text: aiReply,
-          timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
     } catch (err: unknown) {
       const error = err as Error;
+      const locale = language === 'ar' ? 'ar-SA' : 'en-US';
       setMessages((prev) => [
         ...prev,
         {
           id: `ai-err-${Date.now()}`,
           sender: 'ai',
-          text: `عذراً، تعذر الاتصال بمحرك الذكاء الاصطناعي الأكاديمي: ${error?.message || 'يرجى التحقق من الاتصال بالشبكة'}.`,
-          timestamp: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+          text: language === 'ar'
+            ? `عذراً، تعذر الاتصال بمحرك الذكاء الاصطناعي: ${error?.message || 'يرجى التحقق من الاتصال بالشبكة'}.`
+            : `Sorry, unable to connect to the academic AI engine: ${error?.message || 'Please verify network connection'}.`,
+          timestamp: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
     } finally {
@@ -120,17 +125,21 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
   };
 
   const getModeLabel = (mode: string) => {
+    if (language === 'en') {
+      switch (mode) {
+        case 'analyze': return '🔍 Analyze my code and find potential bugs';
+        case 'hint': return '💡 Give me a pedagogical hint to solve the exercise';
+        case 'debug': return '🛠️ How do I fix this code step-by-step?';
+        case 'explain': return '📖 Explain how this code works in plain English';
+        default: return '';
+      }
+    }
     switch (mode) {
-      case 'analyze':
-        return '🔍 فحص الكود واكتشاف الأخطاء البرمجية';
-      case 'hint':
-        return '💡 أحتاج تلميحاً ذكياً لمساعدتي في الحل';
-      case 'debug':
-        return '🛠️ كيف أصلح الكود خطوة بخطوة؟';
-      case 'explain':
-        return '📖 اشرح لي طريقة عمل هذا الكود ببساطة';
-      default:
-        return '';
+      case 'analyze': return '🔍 فحص الكود واكتشاف الأخطاء البرمجية';
+      case 'hint': return '💡 أحتاج تلميحاً ذكياً لمساعدتي في الحل';
+      case 'debug': return '🛠️ كيف أصلح الكود خطوة بخطوة؟';
+      case 'explain': return '📖 اشرح لي طريقة عمل هذا الكود ببساطة';
+      default: return '';
     }
   };
 
@@ -150,18 +159,18 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           </div>
           <div>
             <h3 className="font-bold text-sm flex items-center gap-2">
-              المرشد الأكاديمي الذكي
-              <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded font-normal">
-                Gemini AI
+              {t('aiAssistantTitle')}
+              <span className="text-[10px] bg-white/20 text-white px-1.5 py-0.5 rounded font-normal font-mono">
+                Gemini 3.8
               </span>
             </h3>
-            <p className="text-[11px] text-white/80">تحليل الأخطاء، تلميحات توجيهية، وشروحات مبسطة</p>
+            <p className="text-[11px] text-white/80">{t('aiAssistantSub')}</p>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
+            className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -176,7 +185,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           className="px-2.5 py-1 rounded-full bg-white border border-[#C6A34A]/40 text-[#252B27] hover:bg-[#C6A34A] hover:text-white transition-all font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-[#C6A34A]" />
-          <span>فحص الأخطاء</span>
+          <span>{t('actionAnalyzeErrors')}</span>
         </button>
 
         <button
@@ -185,7 +194,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           className="px-2.5 py-1 rounded-full bg-white border border-[#176B45]/30 text-[#176B45] hover:bg-[#176B45] hover:text-white transition-all font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50"
         >
           <Lightbulb className="w-3.5 h-3.5 text-yellow-600" />
-          <span>تلميح ذكي</span>
+          <span>{t('actionSmartHint')}</span>
         </button>
 
         <button
@@ -194,7 +203,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           className="px-2.5 py-1 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-[#176B45] hover:text-white transition-all font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50"
         >
           <Wrench className="w-3.5 h-3.5" />
-          <span>إصلاح خطوة بخطوة</span>
+          <span>{t('actionDebugSteps')}</span>
         </button>
 
         <button
@@ -203,7 +212,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           className="px-2.5 py-1 rounded-full bg-white border border-gray-300 text-gray-700 hover:bg-[#176B45] hover:text-white transition-all font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50"
         >
           <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-          <span>شرح المفهوم</span>
+          <span>{t('actionExplainConcept')}</span>
         </button>
       </div>
 
@@ -231,7 +240,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
                   : 'bg-white text-[#252B27] border border-[#dbe6df] rounded-tl-none'
               }`}
             >
-              <div className="whitespace-pre-wrap leading-relaxed font-sans select-text">
+              <div className="whitespace-pre-wrap leading-relaxed font-sans select-text text-start">
                 {msg.text}
               </div>
               <div
@@ -244,14 +253,14 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
                   <button
                     onClick={() => copyToClipboard(msg.text, msg.id)}
                     className="hover:text-[#176B45] flex items-center gap-1 cursor-pointer"
-                    title="نسخ الرد"
+                    title={t('copyReplyBtn')}
                   >
                     {copiedId === msg.id ? (
                       <Check className="w-3 h-3 text-green-600" />
                     ) : (
                       <Copy className="w-3 h-3" />
                     )}
-                    <span>{copiedId === msg.id ? 'تم النسخ' : 'نسخ'}</span>
+                    <span>{copiedId === msg.id ? t('copiedBadge') : t('copyReplyBtn')}</span>
                   </button>
                 )}
               </div>
@@ -268,7 +277,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
               <span className="w-2 h-2 rounded-full bg-[#176B45] animate-bounce"></span>
               <span className="w-2 h-2 rounded-full bg-[#176B45] animate-bounce [animation-delay:0.2s]"></span>
               <span className="w-2 h-2 rounded-full bg-[#176B45] animate-bounce [animation-delay:0.4s]"></span>
-              <span className="text-xs text-gray-500 font-medium mr-2">جاري فحص الكود والتفكير الأكاديمي...</span>
+              <span className="text-xs text-gray-500 font-medium mx-2">{t('aiThinkingMessage')}</span>
             </div>
           </div>
         )}
@@ -288,7 +297,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="اسأل المرشد الأكاديمي عن أي سطر برمجي أو مفهوم..."
+          placeholder={t('aiInputPlaceholder')}
           disabled={isLoading}
           className="flex-1 px-3.5 py-2.5 rounded-xl border border-[#dbe6df] focus:outline-hidden focus:border-[#176B45] text-sm text-[#252B27] placeholder:text-gray-400"
         />
@@ -296,7 +305,7 @@ export const AiAssistant: React.FC<AiAssistantProps> = ({
           type="submit"
           disabled={isLoading || !inputText.trim()}
           className="p-2.5 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white disabled:opacity-40 transition-colors shadow-xs cursor-pointer"
-          title="إرسال"
+          title={language === 'ar' ? 'إرسال' : 'Send'}
         >
           <Send className="w-4 h-4 rtl:rotate-180" />
         </button>

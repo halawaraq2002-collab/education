@@ -50,6 +50,7 @@ export interface Course {
   category: string;
   iconName: string;
   color: string;
+  imageUrl?: string;
   overview: string;
   learningObjectives: string[];
   modules: {

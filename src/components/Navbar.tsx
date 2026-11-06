@@ -7,7 +7,6 @@ import {
   User as UserIcon, 
   LogOut, 
   ShieldCheck, 
-  Sparkles, 
   Menu, 
   X,
   Globe,
@@ -22,18 +21,18 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, openAuthModal }) => {
-  const { userProfile, signOutUser, language, setLanguage, loginAsDemoStudent, loginAsDemoAdmin, isAdmin } = useAuth();
+  const { userProfile, signOutUser, language, setLanguage, loginAsDemoStudent, loginAsDemoAdmin, isAdmin, t } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const isAr = language === 'ar';
 
   const navLinks = [
-    { id: 'home', labelAr: 'الرئيسية', labelEn: 'Home' },
-    { id: 'courses', labelAr: 'المقررات الأكاديمية', labelEn: 'Courses' },
-    { id: 'paths', labelAr: 'المسارات التعليمية', labelEn: 'Learning Paths' },
-    { id: 'about', labelAr: 'عن المنصة', labelEn: 'About' },
-    { id: 'contact', labelAr: 'تواصل معنا', labelEn: 'Contact' },
+    { id: 'home', label: t('navHome') },
+    { id: 'courses', label: t('navCourses') },
+    { id: 'paths', label: t('navPaths') },
+    { id: 'about', label: t('navAbout') },
+    { id: 'contact', label: t('navContact') },
   ];
 
   return (
@@ -42,31 +41,35 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
       <div className="bg-[#176B45] text-white text-xs py-1.5 px-4 sm:px-8 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#C6A34A] animate-pulse"></span>
-          <span>{isAr ? 'جامعة المستقبل الأهلية — مشروع تخرج معتمد' : 'Future University — Certified Capstone Project'}</span>
+          <span>{t('universityTitle')}</span>
         </div>
         <div className="flex items-center gap-4">
+          {/* Language Switcher */}
           <button 
             onClick={() => setLanguage(isAr ? 'en' : 'ar')}
-            className="flex items-center gap-1 hover:text-[#C6A34A] transition-colors cursor-pointer"
-            title="تبديل اللغة / Switch Language"
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-[#C6A34A] text-white transition-colors cursor-pointer text-[11px] font-bold"
+            title={isAr ? 'Switch to English' : 'التحويل إلى اللغة العربية'}
           >
             <Globe className="w-3.5 h-3.5" />
-            <span>{isAr ? 'English' : 'العربية'}</span>
+            <span>{isAr ? 'English 🇺🇸' : 'العربية 🇸🇦'}</span>
           </button>
+          
           <div className="h-3 w-px bg-white/20"></div>
+
+          {/* Demo Role Switcher */}
           <div className="flex items-center gap-2">
-            <span className="text-white/80">{isAr ? 'الوضع التجريبي:' : 'Demo Mode:'}</span>
+            <span className="text-white/80 hidden sm:inline">{t('demoMode')}</span>
             <button 
               onClick={loginAsDemoStudent}
-              className={`px-1.5 py-0.5 rounded text-[11px] font-medium transition-all ${userProfile?.role === 'student' ? 'bg-[#C6A34A] text-white font-bold' : 'hover:bg-white/10 text-white/90'}`}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-all ${userProfile?.role === 'student' ? 'bg-[#C6A34A] text-white font-bold' : 'hover:bg-white/10 text-white/90'}`}
             >
-              {isAr ? 'طالب' : 'Student'}
+              {t('demoStudent')}
             </button>
             <button 
               onClick={loginAsDemoAdmin}
-              className={`px-1.5 py-0.5 rounded text-[11px] font-medium transition-all ${userProfile?.role === 'admin' ? 'bg-[#C6A34A] text-white font-bold' : 'hover:bg-white/10 text-white/90'}`}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-all ${userProfile?.role === 'admin' ? 'bg-[#C6A34A] text-white font-bold' : 'hover:bg-white/10 text-white/90'}`}
             >
-              {isAr ? 'مشرف أكاديمي' : 'Admin'}
+              {t('demoAdmin')}
             </button>
           </div>
         </div>
@@ -81,20 +84,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
             onClick={() => setCurrentView('home')} 
             className="flex items-center gap-3.5 cursor-pointer group select-none"
           >
-            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#176B45] to-[#0f482e] flex items-center justify-center shadow-md shadow-[#176B45]/20 group-hover:scale-105 transition-transform">
+            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#176B45] to-[#0f482e] flex items-center justify-center shadow-md shadow-[#176B45]/20 group-hover:scale-105 transition-transform shrink-0">
               <BookOpen className="w-6 h-6 text-white absolute" />
               <GraduationCap className="w-4 h-4 text-[#C6A34A] absolute -top-1.5 -right-1.5 transform rotate-12 drop-shadow" />
               <Code2 className="w-3.5 h-3.5 text-[#C6A34A] absolute -bottom-1 -left-1" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-[#176B45] font-['Cairo'] flex items-center gap-1.5">
-                منصة تعليمية
-                <span className="text-[#C6A34A] text-xs font-semibold px-1.5 py-0.5 rounded bg-[#FAF8F2] border border-[#C6A34A]/30">
-                  جامعية
+                {t('brandName')}
+                <span className="text-[#C6A34A] text-[10px] font-semibold px-1.5 py-0.2 rounded bg-[#FAF8F2] border border-[#C6A34A]/30">
+                  {t('brandTag')}
                 </span>
               </span>
               <span className="text-[10px] tracking-widest text-[#747C76] font-semibold uppercase">
-                EDUCATIONAL PLATFORM
+                {t('brandSubtitle')}
               </span>
             </div>
           </div>
@@ -113,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                       : 'text-[#252B27] hover:text-[#176B45] hover:bg-[#F9FAF9]'
                   }`}
                 >
-                  {isAr ? link.labelAr : link.labelEn}
+                  {link.label}
                 </button>
               );
             })}
@@ -128,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
               }`}
             >
               <Code2 className="w-4 h-4" />
-              <span>{isAr ? 'محرر الأكواد' : 'Code Editor'}</span>
+              <span>{t('navEditor')}</span>
             </button>
           </nav>
 
@@ -143,7 +146,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                   <div className="w-8 h-8 rounded-full bg-[#176B45] text-white flex items-center justify-center font-bold text-sm">
                     {userProfile.displayName ? userProfile.displayName.charAt(0) : 'ط'}
                   </div>
-                  <div className="text-right">
+                  <div className={isAr ? 'text-right' : 'text-left'}>
                     <div className="text-xs font-bold text-[#252B27] leading-tight flex items-center gap-1">
                       {userProfile.displayName}
                       {isAdmin && (
@@ -152,7 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                     </div>
                     <div className="text-[10px] text-[#747C76] flex items-center gap-1">
                       <Award className="w-3 h-3 text-[#C6A34A]" />
-                      <span>{userProfile.points} نقطة</span>
+                      <span>{userProfile.points} {t('pointsCount')}</span>
                     </div>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 text-[#747C76]" />
@@ -160,9 +163,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
 
                 {/* Profile Dropdown */}
                 {profileDropdownOpen && (
-                  <div className="absolute left-0 rtl:right-0 rtl:left-auto mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#E8F2EC] py-2 z-50">
+                  <div className={`absolute ${isAr ? 'right-0' : 'left-0'} mt-2 w-60 bg-white rounded-xl shadow-xl border border-[#E8F2EC] py-2 z-50`}>
                     <div className="px-4 py-2 border-b border-[#f1f4f2]">
-                      <div className="text-xs text-[#747C76]">{isAr ? 'الرقم الأكاديمي' : 'Academic ID'}</div>
+                      <div className="text-xs text-[#747C76]">{t('academicId')}</div>
                       <div className="text-xs font-bold text-[#176B45] font-mono">{userProfile.academicId || 'CS-2026'}</div>
                       <div className="text-[11px] text-[#252B27] mt-0.5 truncate">{userProfile.email}</div>
                     </div>
@@ -172,10 +175,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                         setCurrentView('dashboard');
                         setProfileDropdownOpen(false);
                       }}
-                      className="w-full text-right px-4 py-2 text-sm text-[#252B27] hover:bg-[#E8F2EC] hover:text-[#176B45] flex items-center gap-2"
+                      className={`w-full ${isAr ? 'text-right' : 'text-left'} px-4 py-2 text-sm text-[#252B27] hover:bg-[#E8F2EC] hover:text-[#176B45] flex items-center gap-2 cursor-pointer`}
                     >
                       <UserIcon className="w-4 h-4 text-[#176B45]" />
-                      <span>{isAr ? 'لوحة تحكم الطالب' : 'Student Dashboard'}</span>
+                      <span>{t('studentDashboard')}</span>
                     </button>
 
                     {isAdmin && (
@@ -184,10 +187,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                           setCurrentView('admin');
                           setProfileDropdownOpen(false);
                         }}
-                        className="w-full text-right px-4 py-2 text-sm text-[#C6A34A] hover:bg-[#FAF8F2] font-semibold flex items-center gap-2"
+                        className={`w-full ${isAr ? 'text-right' : 'text-left'} px-4 py-2 text-sm text-[#C6A34A] hover:bg-[#FAF8F2] font-semibold flex items-center gap-2 cursor-pointer`}
                       >
                         <ShieldCheck className="w-4 h-4 text-[#C6A34A]" />
-                        <span>{isAr ? 'لوحة المشرف الأكاديمي' : 'Admin Portal'}</span>
+                        <span>{t('adminPortal')}</span>
                       </button>
                     )}
 
@@ -198,10 +201,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                         signOutUser();
                         setProfileDropdownOpen(false);
                       }}
-                      className="w-full text-right px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                      className={`w-full ${isAr ? 'text-right' : 'text-left'} px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer`}
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>{isAr ? 'تسجيل الخروج' : 'Sign Out'}</span>
+                      <span>{t('signOut')}</span>
                     </button>
                   </div>
                 )}
@@ -212,13 +215,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                   onClick={openAuthModal}
                   className="px-4 py-2 rounded-lg text-sm font-semibold text-[#176B45] hover:bg-[#E8F2EC] transition-all cursor-pointer"
                 >
-                  {isAr ? 'تسجيل الدخول' : 'Sign In'}
+                  {t('signIn')}
                 </button>
                 <button
                   onClick={openAuthModal}
                   className="px-5 py-2 rounded-lg text-sm font-bold bg-[#176B45] text-white hover:bg-[#0f482e] shadow-sm hover:shadow-md transition-all cursor-pointer"
                 >
-                  {isAr ? 'إنشاء حساب جديد' : 'Register'}
+                  {t('register')}
                 </button>
               </div>
             )}
@@ -246,9 +249,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                 setCurrentView(link.id);
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-right px-3 py-2.5 rounded-lg text-sm font-semibold text-[#252B27] hover:bg-[#E8F2EC] hover:text-[#176B45]"
+              className={`w-full ${isAr ? 'text-right' : 'text-left'} px-3 py-2.5 rounded-lg text-sm font-semibold text-[#252B27] hover:bg-[#E8F2EC] hover:text-[#176B45]`}
             >
-              {isAr ? link.labelAr : link.labelEn}
+              {link.label}
             </button>
           ))}
           <button
@@ -256,9 +259,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
               setCurrentView('workspace');
               setMobileMenuOpen(false);
             }}
-            className="w-full text-right px-3 py-2.5 rounded-lg text-sm font-bold text-[#176B45] bg-[#E8F2EC] flex items-center justify-between"
+            className="w-full px-3 py-2.5 rounded-lg text-sm font-bold text-[#176B45] bg-[#E8F2EC] flex items-center justify-between"
           >
-            <span>{isAr ? 'محرر الأكواد التفاعلي' : 'Interactive IDE'}</span>
+            <span>{t('navEditor')}</span>
             <Code2 className="w-4 h-4 text-[#176B45]" />
           </button>
 
@@ -268,9 +271,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                 setCurrentView('dashboard');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-right px-3 py-2.5 rounded-lg text-sm font-bold text-[#176B45] border border-[#176B45] flex items-center justify-between"
+              className="w-full px-3 py-2.5 rounded-lg text-sm font-bold text-[#176B45] border border-[#176B45] flex items-center justify-between"
             >
-              <span>{isAr ? 'لوحة تحكم الطالب' : 'Student Dashboard'}</span>
+              <span>{t('studentDashboard')}</span>
               <UserIcon className="w-4 h-4" />
             </button>
           )}
@@ -281,9 +284,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
                 setCurrentView('admin');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-right px-3 py-2.5 rounded-lg text-sm font-bold text-[#C6A34A] bg-[#FAF8F2] border border-[#C6A34A]/30 flex items-center justify-between"
+              className="w-full px-3 py-2.5 rounded-lg text-sm font-bold text-[#C6A34A] bg-[#FAF8F2] border border-[#C6A34A]/30 flex items-center justify-between"
             >
-              <span>{isAr ? 'لوحة المشرف الأكاديمي' : 'Admin Portal'}</span>
+              <span>{t('adminPortal')}</span>
               <ShieldCheck className="w-4 h-4" />
             </button>
           )}

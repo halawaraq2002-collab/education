@@ -1,5 +1,5 @@
 import React from 'react';
-import { initialCourses } from '../data/coursesData';
+import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen, 
   Sparkles, 
@@ -10,15 +10,9 @@ import {
   GraduationCap, 
   Terminal, 
   Award, 
-  Users, 
-  Laptop, 
   Star, 
-  ShieldCheck,
   Play,
-  Check,
-  Zap,
-  TrendingUp,
-  Cpu
+  Layers
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -32,31 +26,33 @@ export const HomePage: React.FC<HomePageProps> = ({
   onSelectCourse,
   openAuthModal,
 }) => {
+  const { courses, language, t } = useAuth();
+  const isAr = language === 'ar';
+
   return (
     <div className="bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-12 pb-20 md:py-24 bg-gradient-to-b from-[#FAF8F2] via-white to-white border-b border-[#E8F2EC]">
-        {/* Subtle decorative background elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#E8F2EC]/60 rounded-full blur-3xl -z-10 transform translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C6A34A]/10 rounded-full blur-3xl -z-10"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left/Main Column: Text & CTAs */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
+            {/* Main Text & CTAs */}
+            <div className={`lg:col-span-7 space-y-6 text-center ${isAr ? 'lg:text-right' : 'lg:text-left'}`}>
               
               {/* Academic Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F2EC] border border-[#176B45]/20 text-[#176B45] text-xs font-bold shadow-2xs">
                 <GraduationCap className="w-4 h-4 text-[#C6A34A]" />
-                <span>مشروع تخرج أكاديمي لجامعة المستقبل الأهلية 2026</span>
+                <span>{t('heroBadge')}</span>
               </div>
 
               {/* Main Headline */}
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#252B27] tracking-tight leading-[1.25] font-['Cairo']">
-                ابدأ رحلتك نحو{' '}
+                {t('heroHeadlineStart')}{' '}
                 <span className="text-[#176B45] relative inline-block">
-                  احتراف تطوير الويب
+                  {t('heroHeadlineEnd')}
                   <svg className="absolute w-full h-3 -bottom-1 right-0 text-[#C6A34A] opacity-60" viewBox="0 0 100 20" preserveAspectRatio="none">
                     <path d="M0,15 Q50,0 100,15" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
                   </svg>
@@ -65,18 +61,21 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               {/* Supporting Copy */}
               <p className="text-base sm:text-lg text-[#747C76] leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                تعلم البرمجة بطريقة تفاعلية، طبّق ما تتعلمه مباشرة، واكتشف أخطاءك بمساعدة الذكاء الاصطناعي في بيئة جامعية تحاكي سوق العمل العالمي.
+                {t('heroSubtext')}
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+              <div className={`flex flex-col sm:flex-row items-center justify-center ${isAr ? 'lg:justify-start' : 'lg:justify-start'} gap-3.5 pt-2`}>
                 <button
                   onClick={() => setCurrentView('courses')}
                   className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white font-bold text-base shadow-lg shadow-[#176B45]/25 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-95"
                 >
-                  <span>استكشف الدورات</span>
-                  <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform rtl:inline hidden" />
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform ltr:inline hidden" />
+                  <span>{t('exploreCoursesBtn')}</span>
+                  {isAr ? (
+                    <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                  ) : (
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  )}
                 </button>
 
                 <button
@@ -84,23 +83,23 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white hover:bg-[#FAF8F2] text-[#176B45] font-bold text-base border-2 border-[#176B45] shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <Code2 className="w-5 h-5 text-[#C6A34A]" />
-                  <span>ابدأ التعلم مجاناً بالمحرر التفاعلي</span>
+                  <span>{t('startFreeBtn')}</span>
                 </button>
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-[#747C76]">
+              <div className={`pt-4 flex flex-wrap items-center justify-center ${isAr ? 'lg:justify-start' : 'lg:justify-start'} gap-6 text-xs text-[#747C76]`}>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#176B45]" />
-                  <span>محرر أكواد حقيقي مدمج</span>
+                  <span>{t('badgeBuiltinIde')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#176B45]" />
-                  <span>توجيه ذكي باللغة العربية</span>
+                  <span>{t('badgeSmartTutor')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#176B45]" />
-                  <span>شهادة معتمدة بنظام الساعات</span>
+                  <span>{t('badgeAccreditedCert')}</span>
                 </div>
               </div>
             </div>
@@ -109,7 +108,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="lg:col-span-5 relative">
               <div className="relative mx-auto max-w-md lg:max-w-none">
                 
-                {/* Visual Glassmorphism Card Container */}
+                {/* Visual Glassmorphism Card */}
                 <div className="rounded-2xl bg-[#1a201c] p-4 sm:p-5 shadow-2xl border-2 border-[#C6A34A]/40 text-white relative">
                   
                   {/* Window Bar */}
@@ -130,33 +129,45 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                   {/* Code Snippet */}
                   <div className="font-mono text-xs text-left leading-relaxed text-gray-300 pb-3" dir="ltr">
-                    <div className="text-gray-500">// مشروع التخرج: تطوير الويب الأكاديمي</div>
+                    <div className="text-gray-500">// Computer Science Graduation Project 2026</div>
                     <div><span className="text-[#C6A34A]">const</span> student = <span className="text-[#1f8a5a]">new</span> <span className="text-yellow-300">WebDeveloper</span>();</div>
                     <div>student.<span className="text-blue-400">learnCourse</span>(<span className="text-green-300">'HTML, CSS, JS, React'</span>);</div>
-                    <div>student.<span className="text-blue-400">askAiAssistant</span>(<span className="text-green-300">'حلل الكود واكتشف الأخطاء'</span>);</div>
-                    <div className="text-gray-400">// Output: التقدير ممتاز مع مرتبة الشرف ⭐</div>
+                    <div>student.<span className="text-blue-400">askAiAssistant</span>(<span className="text-green-300">'Diagnose & Optimize Code'</span>);</div>
+                    <div className="text-gray-400">// Grade: First-Class Honors (GPA 4.0) ⭐</div>
                   </div>
 
-                  {/* Live Mini Preview Box inside card */}
-                  <div className="mt-2 p-3 bg-white text-[#252B27] rounded-xl text-right">
+                  {/* Live Mini Preview Box */}
+                  <div className={`mt-2 p-3 bg-white text-[#252B27] rounded-xl ${isAr ? 'text-right' : 'text-left'}`}>
                     <div className="flex justify-between items-center mb-1 text-[11px]">
-                      <span className="font-bold text-[#176B45]">معاينة حية للمشروع</span>
-                      <span className="text-[10px] bg-[#E8F2EC] text-[#176B45] px-1.5 py-0.2 rounded font-semibold">استجابة 100%</span>
+                      <span className="font-bold text-[#176B45]">
+                        {isAr ? 'معاينة حية للمشروع' : 'Live Responsive Output'}
+                      </span>
+                      <span className="text-[10px] bg-[#E8F2EC] text-[#176B45] px-1.5 py-0.2 rounded font-semibold">
+                        {isAr ? 'استجابة 100%' : '100% Mobile Ready'}
+                      </span>
                     </div>
                     <div className="bg-[#FAF8F2] border border-[#C6A34A]/30 p-2.5 rounded-lg flex items-center justify-between">
-                      <div className="text-xs font-bold text-[#252B27]">جامعة المستقبل الأهلية</div>
-                      <div className="w-6 h-6 rounded-full bg-[#176B45] text-white flex items-center justify-center text-[10px] font-bold">A+</div>
+                      <div className="text-xs font-bold text-[#252B27]">
+                        {isAr ? 'جامعة المستقبل الأهلية' : 'Future University'}
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-[#176B45] text-white flex items-center justify-center text-[10px] font-bold">
+                        A+
+                      </div>
                     </div>
                   </div>
 
                   {/* Floating AI Notification Card */}
-                  <div className="absolute -bottom-6 -right-6 sm:-right-8 bg-white text-[#252B27] p-3.5 rounded-xl shadow-xl border border-[#dbe6df] flex items-center gap-3 animate-bounce [animation-duration:3s]">
+                  <div className={`absolute -bottom-6 ${isAr ? '-right-6 sm:-right-8' : '-left-6 sm:-left-8'} bg-white text-[#252B27] p-3.5 rounded-xl shadow-xl border border-[#dbe6df] flex items-center gap-3`}>
                     <div className="w-9 h-9 rounded-lg bg-[#C6A34A] text-white flex items-center justify-center shrink-0">
                       <Sparkles className="w-5 h-5" />
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs font-bold text-[#176B45]">مساعد الذكاء الاصطناعي</div>
-                      <div className="text-[11px] text-[#747C76]">كودك سليم ومتوافق مع المعايير القياسية!</div>
+                    <div className={isAr ? 'text-right' : 'text-left'}>
+                      <div className="text-xs font-bold text-[#176B45]">
+                        {isAr ? 'مساعد الذكاء الاصطناعي' : 'Gemini AI Assistant'}
+                      </div>
+                      <div className="text-[11px] text-[#747C76]">
+                        {isAr ? 'كودك سليم ومتوافق مع المعايير الأكاديمية!' : 'Syntax verified against W3C standards!'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -178,16 +189,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                 12,500+
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#747C76] mt-1">
-                طالب وطالبة مسجلين
+                {t('statStudents')}
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#E8F2EC] border border-[#176B45]/20">
               <div className="text-3xl sm:text-4xl font-black text-[#176B45] font-['Cairo']">
-                5
+                {courses.length}
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#747C76] mt-1">
-                مسارات تخصصية معتمدة
+                {t('statTracks')}
               </div>
             </div>
 
@@ -196,7 +207,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 140+
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#747C76] mt-1">
-                درساً وتكليفاً عملياً
+                {t('statLessons')}
               </div>
             </div>
 
@@ -205,7 +216,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 48,000+
               </div>
               <div className="text-xs sm:text-sm font-semibold text-[#747C76] mt-1">
-                تمريناً تم تصحيحه آلياً
+                {t('statExercises')}
               </div>
             </div>
 
@@ -213,56 +224,69 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* Featured Courses Section */}
+      {/* Featured Courses Section with Images */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-bold text-[#C6A34A] tracking-wider uppercase px-3 py-1 rounded-full bg-[#FAF8F2] border border-[#C6A34A]/30">
-              المناهج الأكاديمية المعتمدة
+              {t('curriculumTag')}
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#252B27]">
-              المقررات الدراسية التخصصية
+              {t('featuredCoursesTitle')}
             </h2>
             <p className="text-sm sm:text-base text-[#747C76]">
-              خطة دراسية متكاملة تبدأ من أسس الويب وتتدرج بك خطوة بخطوة حتى بناء تطبيقات الويب المتكاملة لمشروع التخرج.
+              {t('featuredCoursesSub')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {initialCourses.map((course, idx) => (
+            {courses.slice(0, 6).map((course) => (
               <div
                 key={course.id}
                 className="bg-white rounded-2xl border border-[#dbe6df] overflow-hidden shadow-xs hover:shadow-xl transition-all hover:-translate-y-1.5 flex flex-col group"
               >
-                {/* Course Header Banner */}
-                <div className="p-6 bg-gradient-to-br from-[#176B45] to-[#0f482e] text-white relative">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-xs text-[#FAF8F2]">
+                {/* Course Visual Image Header */}
+                <div className="relative h-48 w-full bg-[#176B45] overflow-hidden">
+                  {course.imageUrl ? (
+                    <img
+                      src={course.imageUrl}
+                      alt={isAr ? course.title : course.titleEn}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#176B45] to-[#0f482e] flex items-center justify-center text-white">
+                      <BookOpen className="w-12 h-12 text-[#C6A34A]" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  
+                  <div className="absolute top-3 inset-x-3 flex justify-between items-center">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/30">
                       {course.category}
                     </span>
                     <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#C6A34A] text-white shadow-xs">
-                      {course.level}
+                      {isAr ? course.level : course.levelEn}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#FAF8F2] transition-colors">
-                    {course.title}
-                  </h3>
-                  <div className="text-xs text-white/70 font-mono" dir="ltr">
-                    {course.titleEn}
+
+                  <div className="absolute bottom-3 inset-x-3">
+                    <h3 className="text-lg font-bold text-white drop-shadow-sm leading-tight">
+                      {isAr ? course.title : course.titleEn}
+                    </h3>
                   </div>
                 </div>
 
                 {/* Course Content */}
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <p className="text-sm text-[#747C76] line-clamp-3 leading-relaxed">
-                    {course.shortDescription}
+                    {isAr ? course.shortDescription : course.shortDescriptionEn}
                   </p>
 
                   <div className="pt-4 border-t border-[#f1f4f2] flex items-center justify-between text-xs text-[#747C76]">
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="w-4 h-4 text-[#176B45]" />
-                      <span>{course.totalLessons} دروس تفاعلية</span>
+                      <span>{course.totalLessons} {t('lessonsCountSuffix')}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <GraduationCap className="w-4 h-4 text-[#C6A34A]" />
@@ -275,12 +299,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                       onClick={() => onSelectCourse(course.id)}
                       className="flex-1 py-2.5 px-4 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white text-xs sm:text-sm font-bold transition-all text-center cursor-pointer shadow-xs"
                     >
-                      تفاصيل المقرر
+                      {t('courseDetailsBtn')}
                     </button>
                     <button
                       onClick={() => setCurrentView('workspace')}
                       className="py-2.5 px-3.5 rounded-xl border border-[#176B45] text-[#176B45] hover:bg-[#E8F2EC] text-xs font-bold transition-all cursor-pointer"
-                      title="فتح المحرر المباشر"
+                      title={t('startFreeBtn')}
                     >
                       <Code2 className="w-4 h-4" />
                     </button>
@@ -295,8 +319,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={() => setCurrentView('courses')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[#176B45] text-[#176B45] font-bold text-sm hover:bg-[#E8F2EC] transition-all cursor-pointer"
             >
-              <span>عرض جميع مسارات ومقررات التخرج</span>
-              <ArrowLeft className="w-4 h-4" />
+              <span>{t('viewAllCoursesBtn')}</span>
+              {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
             </button>
           </div>
 
@@ -309,10 +333,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#252B27]">
-              لماذا تختار <span className="text-[#176B45]">منصتنا التعليمية</span>؟
+              {t('whyChooseTitle')}
             </h2>
             <p className="text-sm sm:text-base text-[#747C76]">
-              صُممت المنصة وفق أحدث المعايير الأكاديمية العالمية لتمنحك التجربة الأكثر شمولاً وتكاملاً.
+              {t('whyChooseSub')}
             </p>
           </div>
 
@@ -323,10 +347,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <Code2 className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-[#176B45]">
-                بيئة تطوير حقيقية تفاعلية (Web IDE)
+                {t('featureIdeTitle')}
               </h3>
               <p className="text-sm text-[#747C76] leading-relaxed">
-                اكتب الكود مباشرة داخل المتصفح وشاهد النتائج لحظياً على مختلف مقاسات الشاشات دون الحاجة إلى تثبيت برامج إضافية.
+                {t('featureIdeDesc')}
               </p>
             </div>
 
@@ -335,10 +359,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <Sparkles className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-[#176B45]">
-                مساعد ذكاء اصطناعي أكاديمي ومرشد
+                {t('featureAiTitle')}
               </h3>
               <p className="text-sm text-[#747C76] leading-relaxed">
-                لا يعطيك الحلول الجاهزة فقط، بل يحلل شفرتك البرمجية، يحدد الأخطاء بدقة، ويمنحك تلميحات ذكية لتصل للحل بمفردك.
+                {t('featureAiDesc')}
               </p>
             </div>
 
@@ -347,10 +371,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <Award className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-[#176B45]">
-                تقييم ذاتي واختبارات فورية
+                {t('featureAssessmentTitle')}
               </h3>
               <p className="text-sm text-[#747C76] leading-relaxed">
-                اختبارات قياس مستوى متعددة الخيارات وتمارين برمجية عملية مع تصحيح فوري وشرح أسباب الإجابات الصحيحة والخاطئة.
+                {t('featureAssessmentDesc')}
               </p>
             </div>
 
@@ -368,33 +392,33 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="lg:col-span-8 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-[#FAF8F2] text-xs font-bold">
                   <Sparkles className="w-4 h-4 text-[#C6A34A]" />
-                  <span>تقنية Gemini 3.8 الذكية المدمجة</span>
+                  <span>{t('aiBannerTag')}</span>
                 </div>
                 <h2 className="text-2xl sm:text-4xl font-extrabold font-['Cairo']">
-                  تعلم البرمجة مع أستاذك الخصوصي المتاح على مدار الساعة
+                  {t('aiBannerTitle')}
                 </h2>
                 <p className="text-sm sm:text-base text-gray-200 leading-relaxed max-w-2xl">
-                  تجاوز عقبة الأخطاء البرمجية المحبطة! مرشدنا الذكي يشرح لك سبب الخطأ باللغة العربية البسيطة، ويدربك على التفكير المنطقي كمهندس برمجيات حقيقي.
+                  {t('aiBannerSub')}
                 </p>
                 <div className="pt-2 flex flex-wrap gap-4 text-xs font-semibold">
                   <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-lg">
-                    ✓ تحليل شامل لأكواد HTML و CSS و JS
+                    {t('aiPoint1')}
                   </span>
                   <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-lg">
-                    ✓ تلميحات دون إفساد متعة الحل
+                    {t('aiPoint2')}
                   </span>
                   <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-lg">
-                    ✓ إرشادات تصحيح خطوة بخطوة
+                    {t('aiPoint3')}
                   </span>
                 </div>
               </div>
 
-              <div className="lg:col-span-4 text-center lg:text-left">
+              <div className={`lg:col-span-4 text-center ${isAr ? 'lg:text-left' : 'lg:text-right'}`}>
                 <button
                   onClick={() => setCurrentView('workspace')}
                   className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#C6A34A] hover:bg-[#b59239] text-white font-extrabold text-base shadow-lg transition-all cursor-pointer active:scale-95"
                 >
-                  جرّب المساعد الذكي الآن
+                  {t('tryAiBtn')}
                 </button>
               </div>
             </div>
@@ -402,19 +426,19 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* Student Testimonials Section */}
+      {/* Student Testimonials */}
       <section className="py-20 bg-[#FAF8F2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-bold text-[#176B45] tracking-wider uppercase px-3 py-1 rounded-full bg-[#E8F2EC]">
-              قصص نجاح الطلاب
+              {t('testimonialsTag')}
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#252B27]">
-              ماذا يقول طلاب الجامعات عن المنصة؟
+              {t('testimonialsTitle')}
             </h2>
             <p className="text-sm sm:text-base text-[#747C76]">
-              آراء حقيقية من طلاب كلية علوم الحاسب وهندسة البرمجيات بعد إكمال المقررات.
+              {t('testimonialsSub')}
             </p>
           </div>
 
@@ -427,15 +451,21 @@ export const HomePage: React.FC<HomePageProps> = ({
                 ))}
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
-                "المحرر التفاعلي مع المساعد الذكي وفّر علي ساعات من البحث في المنتديات. فكرة شرح الأخطاء بالعربية مع الحفاظ على المصطلحات ممتازة جداً."
+                {isAr
+                  ? '"المحرر التفاعلي مع المساعد الذكي وفّر علي ساعات من البحث. فكرة شرح الأخطاء بالعربية مع الحفاظ على المصطلحات ممتازة جداً."'
+                  : '"The interactive IDE with Gemini AI saved me hours of debugging. Having errors explained step-by-step is truly phenomenal."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#176B45] text-white font-bold flex items-center justify-center text-sm">
-                  ع
+                  {isAr ? 'ع' : 'A'}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#252B27]">عبد الرحمن الغامدي</h4>
-                  <p className="text-[11px] text-[#747C76]">طالب هندسة برمجيات — جامعة الملك سعود</p>
+                  <h4 className="text-xs font-bold text-[#252B27]">
+                    {isAr ? 'عبد الرحمن الغامدي' : 'Abdulrahman Al-Ghamdi'}
+                  </h4>
+                  <p className="text-[11px] text-[#747C76]">
+                    {isAr ? 'طالب هندسة برمجيات — جامعة الملك سعود' : 'Software Engineering Student — KSU'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -447,15 +477,21 @@ export const HomePage: React.FC<HomePageProps> = ({
                 ))}
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
-                "أفضل منصة أكاديمية ساعدتني في إنجاز مشروع تخرجي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."
+                {isAr
+                  ? '"أفضل منصة أكاديمية ساعدتني في إنجاز مشروع تخرجي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."'
+                  : '"The best academic platform that guided me to finish my capstone project with distinction. Smooth progression from HTML to React."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#C6A34A] text-white font-bold flex items-center justify-center text-sm">
-                  س
+                  {isAr ? 'س' : 'S'}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#252B27]">سارة القحطاني</h4>
-                  <p className="text-[11px] text-[#747C76]">خريجة علوم حاسب — جامعة المستقبل الأهلية</p>
+                  <h4 className="text-xs font-bold text-[#252B27]">
+                    {isAr ? 'سارة القحطاني' : 'Sara Al-Qahtani'}
+                  </h4>
+                  <p className="text-[11px] text-[#747C76]">
+                    {isAr ? 'خريجة علوم حاسب — جامعة المستقبل الأهلية' : 'Computer Science Graduate — Future University'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -467,15 +503,21 @@ export const HomePage: React.FC<HomePageProps> = ({
                 ))}
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
-                "نظام الاختبارات التفاعلية والدرجات الفورية يعطي حافزاً كبيراً للاستمرار وجمع النقاط والشارات الأكاديمية."
+                {isAr
+                  ? '"نظام الاختبارات التفاعلية والدرجات الفورية يعطي حافزاً كبيراً للاستمرار وجمع النقاط والشارات الأكاديمية."'
+                  : '"The interactive quizzes and automated grading give immense motivation to study and earn honors badges."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#176B45] text-white font-bold flex items-center justify-center text-sm">
-                  ي
+                  {isAr ? 'ي' : 'Y'}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#252B27]">يوسف النجار</h4>
-                  <p className="text-[11px] text-[#747C76]">طالب تقنية معلومات — جامعة القاهرة</p>
+                  <h4 className="text-xs font-bold text-[#252B27]">
+                    {isAr ? 'يوسف النجار' : 'Youssef El-Naggar'}
+                  </h4>
+                  <p className="text-[11px] text-[#747C76]">
+                    {isAr ? 'طالب تقنية معلومات — جامعة القاهرة' : 'IT Student — Cairo University'}
+                  </p>
                 </div>
               </div>
             </div>

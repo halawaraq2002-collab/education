@@ -14,6 +14,7 @@ export const initialCourses: Course[] = [
     category: 'هيكلة الويب',
     iconName: 'CodeXml',
     color: '#176B45',
+    imageUrl: '/src/assets/images/html_course_art_1793989779225.jpg',
     overview: 'يقدم هذا المسار الأكاديمي المفاهيم الأساسية لبناء صفحات الويب المتوافقة مع معايير W3C العالمية، مع التركيز على كتابة شيفرة برمجية نظيفة ودلالية تدعم محركات البحث وإمكانية الوصول لذوي الاحتياجات الخاصة.',
     learningObjectives: [
       'فهم شجرة الـ DOM وهيكل مستند HTML5 القياسي.',
@@ -299,6 +300,7 @@ button:hover {
     category: 'تصميم الواجهات',
     iconName: 'Palette',
     color: '#C6A34A',
+    imageUrl: '/src/assets/images/css_course_art_1793989794924.jpg',
     overview: 'يركز هذا المقرر على تحويل الهياكل المجردة إلى واجهات فنية متناسقة وفق الهوية البصرية الأكاديمية الراقية، وتطبيق قواعد التصميم المتجاوب على الهواتف والأجهزة اللوحية والحواسيب.',
     learningObjectives: [
       'فهم نموذج الصندوق (CSS Box Model) وقواعد الأسبقية (Specificity).',
@@ -477,6 +479,7 @@ p {
     category: 'البرمجة والتفاعل',
     iconName: 'Braces',
     color: '#176B45',
+    imageUrl: '/src/assets/images/js_course_art_1793989809548.jpg',
     overview: 'يمثل هذا المقرر جوهر التفاعل في تطبيقات الويب الحديثة. يتعلم الطالب كيفية التحكم في شجرة العناصر (DOM)، والتعامل مع طلبات الشبكة، وبرمجة الخوارزميات المنطقية.',
     learningObjectives: [
       'فهم مميزات ES6+ مثل let, const, Arrow Functions, Destructuring.',
@@ -656,6 +659,7 @@ button:hover {
     category: 'أطر عمل الواجهات',
     iconName: 'Atom',
     color: '#0284C7',
+    imageUrl: '/src/assets/images/react_course_art_1793989823330.jpg',
     overview: 'يغطي هذا المسار التقنيات التي تعتمدها الشركات الكبرى في بناء الويب التفاعلي. يتعرف الطالب على صياغة JSX، وإدارة الحالة المحلية بمساعدة useState و useEffect، وتمرير البيانات بين المكونات.',
     learningObjectives: [
       'فهم نموذج Virtual DOM وكيفية تحديث واجهة المستخدم بكفاءة.',
@@ -859,6 +863,7 @@ render();`,
     category: 'مشروع التخرج الأكاديمي',
     iconName: 'GraduationCap',
     color: '#C6A34A',
+    imageUrl: '/src/assets/images/capstone_course_art_1793989838051.jpg',
     overview: 'مشروع التخرج المعتمد للمنصة التعليمية. يقوم الطالب بتطوير بوابة خدمات متكاملة تبرز مهاراته في هندسة البرمجيات، اختبار الكود، والتكامل مع الذكاء الاصطناعي.',
     learningObjectives: [
       'تخطيط وتنفيذ مشروع تخرج جامعي متكامل بالمعايير العالمية.',

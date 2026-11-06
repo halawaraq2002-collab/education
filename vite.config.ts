@@ -19,8 +19,8 @@ function apiPlugin(): Plugin {
           req.on('end', async () => {
             try {
               const data = JSON.parse(body || '{}');
-              // Dynamically import to ensure environment variables are populated
-              const { askAiAssistant } = await import('./src/server/gemini.ts');
+              // Use server.ssrLoadModule to load and transpile TypeScript in Vite
+              const { askAiAssistant } = await server.ssrLoadModule('./src/server/gemini.ts');
               const result = await askAiAssistant(data);
               res.setHeader('Content-Type', 'application/json; charset=utf-8');
               res.statusCode = 200;

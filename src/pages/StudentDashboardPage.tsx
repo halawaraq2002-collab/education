@@ -1,20 +1,15 @@
 import React from 'react';
-import { initialCourses, badgesList } from '../data/coursesData';
+import { badgesList } from '../data/coursesData';
 import { useAuth } from '../context/AuthContext';
 import { 
-  User, 
   Award, 
   BookOpen, 
   CheckCircle2, 
-  Clock, 
   Play, 
-  GraduationCap, 
-  Sparkles,
-  TrendingUp,
-  ShieldCheck,
-  Calendar,
-  Code2,
-  FileQuestion
+  TrendingUp, 
+  Calendar, 
+  Code2, 
+  FileQuestion 
 } from 'lucide-react';
 
 interface StudentDashboardPageProps {
@@ -28,11 +23,12 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
   onStartLesson,
   setCurrentView,
 }) => {
-  const { userProfile } = useAuth();
+  const { userProfile, courses, language, t } = useAuth();
+  const isAr = language === 'ar';
 
   const profile = userProfile || {
     uid: 'guest',
-    displayName: 'أحمد بن عبد الرحمن الأكاديمي',
+    displayName: isAr ? 'أحمد بن عبد الرحمن الأكاديمي' : 'Ahmed Al-Akademi',
     email: 'student@university.edu.sa',
     academicId: 'CS-2026-8841',
     university: 'جامعة المستقبل الأهلية',
@@ -45,14 +41,14 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
   };
 
   // Calculate stats
-  const enrolledCourses = initialCourses.filter((c) =>
+  const enrolledCourses = courses.filter((c) =>
     profile.enrolledCourseIds.includes(c.id)
   );
 
   let totalAvailableLessons = 0;
-  initialCourses.forEach((c) => {
-    c.modules.forEach((m) => {
-      totalAvailableLessons += m.lessons.length;
+  courses.forEach((c) => {
+    c.modules?.forEach((m) => {
+      totalAvailableLessons += m.lessons?.length || 0;
     });
   });
 
@@ -62,7 +58,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
     : 0;
 
   // Mock weekly activity data
-  const weeklyActivity = [
+  const weeklyActivity = isAr ? [
     { day: 'السبت', hours: 2.5 },
     { day: 'الأحد', hours: 4.0 },
     { day: 'الإثنين', hours: 3.2 },
@@ -70,6 +66,14 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
     { day: 'الأربعاء', hours: 2.0 },
     { day: 'الخميس', hours: 4.8 },
     { day: 'الجمعة', hours: 1.5 },
+  ] : [
+    { day: 'Sat', hours: 2.5 },
+    { day: 'Sun', hours: 4.0 },
+    { day: 'Mon', hours: 3.2 },
+    { day: 'Tue', hours: 5.5 },
+    { day: 'Wed', hours: 2.0 },
+    { day: 'Thu', hours: 4.8 },
+    { day: 'Fri', hours: 1.5 },
   ];
 
   const maxHours = Math.max(...weeklyActivity.map((d) => d.hours));
@@ -79,24 +83,24 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Welcome Banner */}
-        <div className="bg-white rounded-3xl border border-[#dbe6df] shadow-xs p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className={`bg-white rounded-3xl border border-[#dbe6df] shadow-xs p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 ${isAr ? 'text-right' : 'text-left'}`}>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#176B45] to-[#0f482e] text-white flex items-center justify-center text-2xl font-black shadow-md shadow-[#176B45]/20">
-              {profile.displayName ? profile.displayName.charAt(0) : 'ط'}
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#176B45] to-[#0f482e] text-white flex items-center justify-center text-2xl font-black shadow-md shadow-[#176B45]/20 shrink-0">
+              {profile.displayName ? profile.displayName.charAt(0) : 'S'}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-extrabold text-[#252B27]">
-                  مرحباً بك، {profile.displayName}
+                  {t('welcomeStudentPrefix')} {profile.displayName}
                 </h1>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E8F2EC] text-[#176B45] border border-[#176B45]/30">
-                  طالب جامعي منتظم
+                  {t('regularStudentBadge')}
                 </span>
               </div>
               <p className="text-xs text-[#747C76] mt-1 flex flex-wrap items-center gap-3">
-                <span>الرقم الأكاديمي: <strong className="font-mono text-[#176B45]">{profile.academicId || 'CS-2026-8841'}</strong></span>
+                <span>{t('academicIdPrefix')} <strong className="font-mono text-[#176B45]">{profile.academicId || 'CS-2026-8841'}</strong></span>
                 <span>•</span>
-                <span>{profile.university || 'جامعة المستقبل الأهلية'}</span>
+                <span>{profile.university || (isAr ? 'جامعة المستقبل الأهلية' : 'Future University')}</span>
               </p>
             </div>
           </div>
@@ -107,17 +111,16 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
               className="px-5 py-2.5 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#176B45]/20 flex items-center gap-2 cursor-pointer transition-all"
             >
               <Code2 className="w-4 h-4" />
-              <span>متابعة التعلم بالمحرر</span>
+              <span>{t('continueInIdeBtn')}</span>
             </button>
           </div>
         </div>
 
         {/* 4 Overview Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          
           <div className="bg-white p-5 rounded-2xl border border-[#dbe6df] shadow-xs">
             <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-semibold text-[#747C76]">معدل الإنجاز العام</span>
+              <span className="text-xs font-semibold text-[#747C76]">{t('overallProgressCard')}</span>
               <div className="p-2 rounded-lg bg-[#E8F2EC] text-[#176B45]">
                 <TrendingUp className="w-4 h-4" />
               </div>
@@ -130,74 +133,73 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
 
           <div className="bg-white p-5 rounded-2xl border border-[#dbe6df] shadow-xs">
             <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-semibold text-[#747C76]">المقررات المسجلة</span>
+              <span className="text-xs font-semibold text-[#747C76]">{t('enrolledCoursesCard')}</span>
               <div className="p-2 rounded-lg bg-[#FAF8F2] text-[#C6A34A]">
                 <BookOpen className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-[#252B27]">
-              {enrolledCourses.length} <span className="text-xs font-normal text-gray-500">من 5</span>
+              {enrolledCourses.length} <span className="text-xs font-normal text-gray-500">/ {courses.length}</span>
             </div>
-            <p className="text-[11px] text-[#747C76] mt-2">مسارات تخصصية نشطة</p>
+            <p className="text-[11px] text-[#747C76] mt-2">{t('activeSpecializedTracks')}</p>
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-[#dbe6df] shadow-xs">
             <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-semibold text-[#747C76]">الدروس المكتملة</span>
+              <span className="text-xs font-semibold text-[#747C76]">{t('completedLessonsCard')}</span>
               <div className="p-2 rounded-lg bg-[#E8F2EC] text-[#176B45]">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-[#176B45]">
-              {completedCount} <span className="text-xs font-normal text-gray-500">درساً</span>
+              {completedCount} <span className="text-xs font-normal text-gray-500">{t('lessonsCountSuffix')}</span>
             </div>
-            <p className="text-[11px] text-[#747C76] mt-2">تم تطبيقها بنجاح</p>
+            <p className="text-[11px] text-[#747C76] mt-2">{t('successfullyApplied')}</p>
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-[#dbe6df] shadow-xs">
             <div className="flex justify-between items-start mb-2">
-              <span className="text-xs font-semibold text-[#747C76]">النقاط والأوسمة</span>
+              <span className="text-xs font-semibold text-[#747C76]">{t('pointsAndBadgesCard')}</span>
               <div className="p-2 rounded-lg bg-[#FAF8F2] text-[#C6A34A]">
                 <Award className="w-4 h-4" />
               </div>
             </div>
             <div className="text-2xl font-black text-[#C6A34A]">
-              {profile.points} <span className="text-xs font-normal text-gray-500">نقطة</span>
+              {profile.points} <span className="text-xs font-normal text-gray-500">{t('pointsCount')}</span>
             </div>
-            <p className="text-[11px] text-[#747C76] mt-2">{profile.badges.length} أوسمة فخرية</p>
+            <p className="text-[11px] text-[#747C76] mt-2">{profile.badges.length} {t('honoraryBadgesCount')}</p>
           </div>
-
         </div>
 
         {/* Middle Section: Enrolled Courses & Learning Activity Chart */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Left: Enrolled Courses List */}
+          {/* Enrolled Courses List */}
           <div className="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-[#dbe6df] shadow-xs space-y-6">
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">
               <h2 className="text-lg font-bold text-[#176B45] flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-[#C6A34A]" />
-                <span>المقررات الدراسية الحالية</span>
+                <span>{t('currentCoursesHeading')}</span>
               </h2>
               <button
                 onClick={() => setCurrentView('courses')}
-                className="text-xs font-bold text-[#176B45] hover:underline"
+                className="text-xs font-bold text-[#176B45] hover:underline cursor-pointer"
               >
-                تصفح كافة المقررات
+                {t('browseAllCoursesLink')}
               </button>
             </div>
 
             <div className="space-y-4">
               {enrolledCourses.length === 0 ? (
                 <div className="text-center py-8 text-gray-500 text-xs">
-                  لم تقم بالتسجيل في أي مقرر بعد. تصفح المقررات وابدأ التعلم الآن.
+                  {t('noEnrolledCoursesYet')}
                 </div>
               ) : (
                 enrolledCourses.map((course) => {
                   let courseLessonsCount = 0;
                   let courseCompletedCount = 0;
-                  course.modules.forEach((m) => {
-                    m.lessons.forEach((l) => {
+                  course.modules?.forEach((m) => {
+                    m.lessons?.forEach((l) => {
                       courseLessonsCount++;
                       if (profile.completedLessonIds.includes(l.id)) courseCompletedCount++;
                     });
@@ -214,10 +216,10 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                       <div className="space-y-1.5 flex-1">
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E8F2EC] text-[#176B45]">
-                            {course.level}
+                            {isAr ? course.level : course.levelEn}
                           </span>
                           <h4 className="text-sm sm:text-base font-bold text-[#252B27]">
-                            {course.title}
+                            {isAr ? course.title : course.titleEn}
                           </h4>
                         </div>
                         <div className="w-full max-w-md bg-gray-200 h-2 rounded-full overflow-hidden">
@@ -227,28 +229,28 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                           ></div>
                         </div>
                         <div className="text-[11px] text-[#747C76] flex items-center gap-3">
-                          <span>{courseCompletedCount} من {courseLessonsCount} دروس مكتملة</span>
+                          <span>{t('lessonsCompletedRatio')(courseCompletedCount, courseLessonsCount)}</span>
                           <span>•</span>
-                          <span>معدل الإنجاز: {progress}%</span>
+                          <span>{t('progressRatePrefix')} {progress}%</span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => {
-                            const firstIncomplete = course.modules[0]?.lessons[0]?.id || 'html-1';
+                            const firstIncomplete = course.modules?.[0]?.lessons?.[0]?.id || 'html-1';
                             onStartLesson(course.id, firstIncomplete);
                           }}
                           className="px-4 py-2 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                         >
                           <Play className="w-3.5 h-3.5 fill-white" />
-                          <span>متابعة</span>
+                          <span>{t('continueBtn')}</span>
                         </button>
                         <button
                           onClick={() => onSelectCourse(course.id)}
                           className="px-3 py-2 rounded-xl border border-gray-200 hover:bg-white text-xs font-bold text-[#252B27] cursor-pointer"
                         >
-                          التفاصيل
+                          {t('detailsBtn')}
                         </button>
                       </div>
                     </div>
@@ -258,7 +260,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
             </div>
           </div>
 
-          {/* Right: Learning Activity & Quiz Performance */}
+          {/* Activity & Quiz Performance */}
           <div className="lg:col-span-4 space-y-6">
             
             {/* Weekly Activity Bar Chart */}
@@ -266,12 +268,11 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
               <div className="flex justify-between items-center pb-2 border-b border-gray-100">
                 <h3 className="text-sm font-bold text-[#176B45] flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-[#C6A34A]" />
-                  <span>نشاط التعلم الأسبوعي</span>
+                  <span>{t('weeklyActivityHeading')}</span>
                 </h3>
-                <span className="text-[11px] text-[#747C76]">23.5 ساعة هذا الأسبوع</span>
+                <span className="text-[11px] text-[#747C76]">{t('weeklyHoursCount')}</span>
               </div>
 
-              {/* Chart Bars */}
               <div className="h-44 flex items-end justify-between gap-2 pt-6 pb-2">
                 {weeklyActivity.map((d, i) => {
                   const heightPercent = Math.round((d.hours / maxHours) * 100);
@@ -287,7 +288,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                         ></div>
                       </div>
                       <span className="text-[10px] font-semibold text-gray-600 truncate">
-                        {d.day.substring(0, 3)}
+                        {d.day}
                       </span>
                     </div>
                   );
@@ -299,17 +300,19 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
             <div className="bg-white p-6 rounded-3xl border border-[#dbe6df] shadow-xs space-y-3">
               <h3 className="text-sm font-bold text-[#176B45] flex items-center gap-1.5 pb-2 border-b border-gray-100">
                 <FileQuestion className="w-4 h-4 text-[#C6A34A]" />
-                <span>نتائج الاختبارات الأكاديمية</span>
+                <span>{t('quizResultsHeading')}</span>
               </h3>
               <div className="space-y-2.5">
                 {Object.keys(profile.quizScores).length === 0 ? (
-                  <p className="text-xs text-gray-500 italic">لم تقدم أي اختبار بعد.</p>
+                  <p className="text-xs text-gray-500 italic">{t('noQuizzesTakenYet')}</p>
                 ) : (
                   Object.entries(profile.quizScores).map(([cId, score]) => {
-                    const c = initialCourses.find((item) => item.id === cId);
+                    const c = courses.find((item) => item.id === cId);
                     return (
                       <div key={cId} className="flex justify-between items-center text-xs p-2.5 rounded-xl bg-[#FAF8F2] border border-gray-100">
-                        <span className="font-bold text-[#252B27] truncate">{c ? c.title : cId}</span>
+                        <span className="font-bold text-[#252B27] truncate">
+                          {c ? (isAr ? c.title : c.titleEn) : cId}
+                        </span>
                         <span className="font-mono font-bold text-[#176B45] bg-[#E8F2EC] px-2 py-0.5 rounded">
                           {score}%
                         </span>
@@ -324,16 +327,16 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
 
         </div>
 
-        {/* Badges and Academic Honors Section */}
+        {/* Badges Section */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#dbe6df] shadow-xs space-y-6">
           <div className="flex justify-between items-center pb-2 border-b border-gray-100">
             <div>
               <h2 className="text-lg font-bold text-[#176B45] flex items-center gap-2">
                 <Award className="w-5 h-5 text-[#C6A34A]" />
-                <span>الأوسمة الأكاديمية والإنجازات (Badges)</span>
+                <span>{t('badgesHeading')}</span>
               </h2>
               <p className="text-xs text-[#747C76] mt-0.5">
-                أوسمة فخرية تمنح للطلاب المتفوقين عند استيفاء متطلبات كل مسار.
+                {t('badgesSub')}
               </p>
             </div>
           </div>
@@ -358,7 +361,9 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                   >
                     <Award className="w-6 h-6 text-[#C6A34A]" />
                   </div>
-                  <h4 className="text-xs font-bold text-[#252B27] mb-1">{badge.title}</h4>
+                  <h4 className="text-xs font-bold text-[#252B27] mb-1">
+                    {isAr ? badge.title : badge.titleEn}
+                  </h4>
                   <p className="text-[10px] text-[#747C76] leading-tight line-clamp-2">
                     {badge.description}
                   </p>
@@ -367,7 +372,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                       isUnlocked ? 'bg-[#E8F2EC] text-[#176B45]' : 'bg-gray-200 text-gray-500'
                     }`}
                   >
-                    {isUnlocked ? 'مكتسب ⭐' : 'قيد الإنجاز'}
+                    {isUnlocked ? t('badgeUnlockedBadge') : t('badgeInProgressBadge')}
                   </span>
                 </div>
               );

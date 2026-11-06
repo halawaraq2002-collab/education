@@ -18,6 +18,26 @@
       },
       "required": ["uid", "email", "role"]
     },
+    "Course": {
+      "title": "Course",
+      "description": "Educational course track and curriculum",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 150 },
+        "titleEn": { "type": "string", "maxLength": 150 },
+        "shortDescription": { "type": "string", "maxLength": 500 },
+        "shortDescriptionEn": { "type": "string", "maxLength": 500 },
+        "level": { "type": "string", "maxLength": 50 },
+        "levelEn": { "type": "string", "maxLength": 50 },
+        "duration": { "type": "string", "maxLength": 50 },
+        "totalLessons": { "type": "number" },
+        "category": { "type": "string", "maxLength": 100 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "titleEn"]
+    },
     "CourseProgress": {
       "title": "CourseProgress",
       "description": "Student progress for a specific course",
@@ -51,6 +71,10 @@
     "/users/{userId}": {
       "schema": "User",
       "description": "User profile documents keyed by Firebase Auth UID"
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Managed academic courses available in the platform"
     },
     "/users/{userId}/progress/{courseId}": {
       "schema": "CourseProgress",

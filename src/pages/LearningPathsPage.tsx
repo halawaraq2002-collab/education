@@ -1,16 +1,10 @@
 import React from 'react';
-import { initialCourses } from '../data/coursesData';
+import { useAuth } from '../context/AuthContext';
 import { 
   Milestone, 
-  CheckCircle2, 
   ArrowLeft, 
   ArrowRight, 
-  Sparkles, 
-  GraduationCap, 
-  Code2, 
-  BookOpen, 
-  Award,
-  Layers
+  BookOpen
 } from 'lucide-react';
 
 interface LearningPathsPageProps {
@@ -22,46 +16,68 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
   onSelectCourse,
   setCurrentView,
 }) => {
+  const { language, t } = useAuth();
+
   const steps = [
     {
       step: 1,
       courseId: 'html-fundamentals',
-      title: 'المرحلة 1: بناء الهيكل والوسوم الدلالية',
-      description: 'تعلم هيكلة صفحات الويب المتوافقة مع معايير W3C الدلالية وقواعد الوصول (Accessibility).',
-      duration: 'أسبوعان',
-      level: 'مبتدئ',
+      titleAr: 'المرحلة 1: بناء الهيكل والوسوم الدلالية',
+      titleEn: 'Stage 1: Semantic Structure & HTML5 Architecture',
+      descriptionAr: 'تعلم هيكلة صفحات الويب المتوافقة مع معايير W3C الدلالية وقواعد الوصول (Accessibility).',
+      descriptionEn: 'Master semantic web architecture complying with W3C standards and accessibility best practices.',
+      durationAr: 'أسبوعان',
+      durationEn: '2 Weeks',
+      levelAr: 'مبتدئ',
+      levelEn: 'Beginner',
     },
     {
       step: 2,
       courseId: 'css-responsive',
-      title: 'المرحلة 2: إتقان التنسيق والتصميم المتجاوب',
-      description: 'تحويل الهيكل إلى تصاميم جذابة بنظامي Flexbox و Grid مع التوافق التام مع كل الشاشات.',
-      duration: '3 أسابيع',
-      level: 'مبتدئ إلى متوسط',
+      titleAr: 'المرحلة 2: إتقان التنسيق والتصميم المتجاوب',
+      titleEn: 'Stage 2: Styling & Responsive Web Design',
+      descriptionAr: 'تحويل الهيكل إلى تصاميم جذابة بنظامي Flexbox و Grid مع التوافق التام مع كل الشاشات.',
+      descriptionEn: 'Transform layouts into modern designs with Flexbox, CSS Grid, and mobile-first responsiveness.',
+      durationAr: '3 أسابيع',
+      durationEn: '3 Weeks',
+      levelAr: 'مبتدئ إلى متوسط',
+      levelEn: 'Beginner to Intermediate',
     },
     {
       step: 3,
       courseId: 'javascript-programming',
-      title: 'المرحلة 3: البرمجة التفاعلية وإدارة DOM',
-      description: 'كتابة شيفرات ES6+ الحديثة، التحكم في الأحداث، التعامل مع الذاكرة والـ Async/Await.',
-      duration: '4 أسابيع',
-      level: 'متوسط',
+      titleAr: 'المرحلة 3: البرمجة التفاعلية وإدارة DOM',
+      titleEn: 'Stage 3: Interactive Programming & DOM Engine',
+      descriptionAr: 'كتابة شيفرات ES6+ الحديثة، التحكم في الأحداث، التعامل مع الذاكرة والـ Async/Await.',
+      descriptionEn: 'Write modern ES6+ code, handle asynchronous events, manage DOM nodes, and integrate APIs.',
+      durationAr: '4 أسابيع',
+      durationEn: '4 Weeks',
+      levelAr: 'متوسط',
+      levelEn: 'Intermediate',
     },
     {
       step: 4,
       courseId: 'react-fundamentals',
-      title: 'المرحلة 4: هندسة المكونات بأطر العمل (React.js)',
-      description: 'بناء تطبيقات أحادية الصفحة (SPA)، إدارة الحالة بالـ Hooks، وتصميم واجهات عالية الأداء.',
-      duration: '4 أسابيع',
-      level: 'متوسط إلى متقدم',
+      titleAr: 'المرحلة 4: هندسة المكونات بأطر العمل (React.js)',
+      titleEn: 'Stage 4: Component Architecture with React.js',
+      descriptionAr: 'بناء تطبيقات أحادية الصفحة (SPA)، إدارة الحالة بالـ Hooks، وتصميم واجهات عالية الأداء.',
+      descriptionEn: 'Build scalable single-page apps (SPAs), state workflows with hooks, and reactive component lifecycles.',
+      durationAr: '4 أسابيع',
+      durationEn: '4 Weeks',
+      levelAr: 'متوسط إلى متقدم',
+      levelEn: 'Intermediate to Advanced',
     },
     {
       step: 5,
       courseId: 'frontend-fullstack',
-      title: 'المرحلة 5: مشروع التخرج الشامل والاعتماد النهائي',
-      description: 'تطوير مشروع تخرج واقعي متكامل يربط الـ APIs ويجتاز مناقشة اللجنة الأكاديمية.',
-      duration: '5 أسابيع',
-      level: 'مشروع التخرج الأكاديمي',
+      titleAr: 'المرحلة 5: مشروع التخرج الشامل والاعتماد النهائي',
+      titleEn: 'Stage 5: Full-Stack Capstone Project Defense',
+      descriptionAr: 'تطوير مشروع تخرج واقعي متكامل يربط الـ APIs ويجتاز مناقشة اللجنة الأكاديمية.',
+      descriptionEn: 'Develop an end-to-end full-stack capstone project ready for graduation faculty defense.',
+      durationAr: '5 أسابيع',
+      durationEn: '5 Weeks',
+      levelAr: 'مشروع التخرج الأكاديمي',
+      levelEn: 'Academic Capstone Level',
     },
   ];
 
@@ -73,20 +89,20 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
         <div className="bg-white p-8 rounded-3xl border border-[#dbe6df] shadow-xs text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F2EC] text-[#176B45] text-xs font-bold">
             <Milestone className="w-4 h-4 text-[#C6A34A]" />
-            <span>خارطة الطريق الأكاديمية لاحتراف تطوير الويب</span>
+            <span>{t('roadmapTag')}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-[#252B27] font-['Cairo']">
-            المسار التخصصي المتكامل لتطوير الويب
+            {t('roadmapTitle')}
           </h1>
           <p className="text-xs sm:text-sm text-[#747C76] max-w-2xl mx-auto">
-            منهج مصمم بعناية فائقة يضمن انتقال الطالب من المبادئ البرمجية الأساسية إلى الكفاءة الكاملة لإنجاز مشروع التخرج.
+            {t('roadmapSub')}
           </p>
         </div>
 
         {/* Timeline Path Steps */}
-        <div className="space-y-6 relative before:absolute before:inset-0 before:right-6 md:before:right-8 before:w-0.5 before:bg-[#176B45]/20">
+        <div className="space-y-6 relative before:absolute before:inset-0 rtl:before:right-6 rtl:md:before:right-8 ltr:before:left-6 ltr:md:before:left-8 before:w-0.5 before:bg-[#176B45]/20">
           {steps.map((st) => (
-            <div key={st.step} className="relative flex items-start gap-5 pr-2 md:pr-4 group">
+            <div key={st.step} className="relative flex items-start gap-5 rtl:pr-2 rtl:md:pr-4 ltr:pl-2 ltr:md:pl-4 group">
               
               {/* Step Number Circle */}
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-[#176B45] text-white flex items-center justify-center font-black text-sm md:text-base shrink-0 z-10 shadow-md shadow-[#176B45]/20 group-hover:scale-110 transition-transform">
@@ -94,20 +110,22 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
               </div>
 
               {/* Step Card */}
-              <div className="flex-1 bg-white p-6 rounded-2xl border border-[#dbe6df] shadow-xs hover:shadow-lg transition-all space-y-3">
+              <div className="flex-1 bg-white p-6 rounded-2xl border border-[#dbe6df] shadow-xs hover:shadow-lg transition-all space-y-3 text-start">
                 <div className="flex flex-wrap justify-between items-center gap-2">
                   <span className="text-xs font-bold text-[#C6A34A] bg-[#FAF8F2] px-2.5 py-0.5 rounded-full border border-[#C6A34A]/30">
-                    {st.level}
+                    {language === 'ar' ? st.levelAr : st.levelEn}
                   </span>
-                  <span className="text-xs text-[#747C76] font-mono">المدة المقدرة: {st.duration}</span>
+                  <span className="text-xs text-[#747C76] font-mono">
+                    {language === 'ar' ? `المدة المقدرة: ${st.durationAr}` : `Duration: ${st.durationEn}`}
+                  </span>
                 </div>
 
                 <h3 className="text-base sm:text-lg font-bold text-[#176B45]">
-                  {st.title}
+                  {language === 'ar' ? st.titleAr : st.titleEn}
                 </h3>
 
                 <p className="text-xs sm:text-sm text-[#747C76] leading-relaxed">
-                  {st.description}
+                  {language === 'ar' ? st.descriptionAr : st.descriptionEn}
                 </p>
 
                 <div className="pt-2 flex items-center gap-3">
@@ -115,13 +133,13 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
                     onClick={() => onSelectCourse(st.courseId)}
                     className="px-4 py-2 rounded-xl bg-[#176B45] hover:bg-[#0f482e] text-white text-xs font-bold transition-colors cursor-pointer"
                   >
-                    استعراض المنهج والدروس
+                    {t('exploreCurriculumBtn')}
                   </button>
                   <button
                     onClick={() => setCurrentView('workspace')}
                     className="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-[#FAF8F2] text-xs font-bold text-[#252B27] cursor-pointer"
                   >
-                    فتح المحرر
+                    {t('openEditorBtn')}
                   </button>
                 </div>
               </div>
