@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Student or Admin user profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "enrolledCourses": { "type": "array" },
+        "completedLessons": { "type": "array" },
+        "points": { "type": "number" },
+        "badges": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "CourseProgress": {
+      "title": "CourseProgress",
+      "description": "Student progress for a specific course",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "courseId": { "type": "string", "maxLength": 64 },
+        "completedLessonIds": { "type": "array" },
+        "lastLessonId": { "type": "string", "maxLength": 64 },
+        "quizScore": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "courseId"]
+    },
+    "QuizSubmission": {
+      "title": "QuizSubmission",
+      "description": "Submitted answers and score for a quiz",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "courseId": { "type": "string", "maxLength": 64 },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "passed": { "type": "boolean" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["userId", "courseId", "score"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents keyed by Firebase Auth UID"
+    },
+    "/users/{userId}/progress/{courseId}": {
+      "schema": "CourseProgress",
+      "description": "Per-course progress for a student"
+    },
+    "/quizSubmissions/{submissionId}": {
+      "schema": "QuizSubmission",
+      "description": "Records of quiz attempts and grades"
+    }
+  }
+}
