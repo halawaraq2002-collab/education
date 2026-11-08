@@ -1,5 +1,6 @@
 import React from 'react';
 import { badgesList } from '../data/coursesData';
+import { Badge } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { 
   Award, 
@@ -342,7 +343,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {badgesList.map((badge) => {
+            {badgesList.map((badge: Badge) => {
               const isUnlocked = profile.badges.includes(badge.id);
 
               return (

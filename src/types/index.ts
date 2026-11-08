@@ -59,6 +59,14 @@ export interface Course {
     lessons: Lesson[];
   }[];
   quiz: Quiz;
+  track?: 'frontend' | 'backend' | 'fullstack';
+  levelNumber?: number;
+  practicalProject?: {
+    title: string;
+    titleEn: string;
+    description: string;
+    descriptionEn: string;
+  };
 }
 
 export interface Badge {

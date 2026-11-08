@@ -240,6 +240,63 @@ export const HomePage: React.FC<HomePageProps> = ({
             </p>
           </div>
 
+          {/* 3 Core Tracks Pillars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14 text-start">
+            <div
+              onClick={() => setCurrentView('paths')}
+              className="p-6 rounded-3xl bg-[#FAF8F2] border border-[#dbe6df] hover:border-[#176B45] transition-all cursor-pointer shadow-2xs space-y-3 group"
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🎨</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#176B45] text-white">
+                  {isAr ? 'المسار 1' : 'Track 1'}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[#176B45] group-hover:text-[#0f482e] transition-colors">
+                {isAr ? 'مسار الواجهات (Frontend)' : 'Frontend Track'}
+              </h3>
+              <p className="text-xs text-[#747C76] leading-relaxed">
+                {isAr ? 'HTML5 و CSS3 و JavaScript الحديثة وتصميم المواقع المتجاوبة وأطر العمل بـ React.js.' : 'Modern HTML5, CSS3, ES6+ JavaScript, Responsive Design, and React.js components.'}
+              </p>
+            </div>
+
+            <div
+              onClick={() => setCurrentView('paths')}
+              className="p-6 rounded-3xl bg-[#FAF8F2] border border-[#dbe6df] hover:border-[#176B45] transition-all cursor-pointer shadow-2xs space-y-3 group"
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">⚙️</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#176B45] text-white">
+                  {isAr ? 'المسار 2' : 'Track 2'}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[#176B45] group-hover:text-[#0f482e] transition-colors">
+                {isAr ? 'مسار الخادم والبيانات (Backend)' : 'Backend & DB Track'}
+              </h3>
+              <p className="text-xs text-[#747C76] leading-relaxed">
+                {isAr ? 'إدارة الإصدارات بـ Git/GitHub، بناء خوادم Node.js و Express، ومخططات قواعد البيانات و SQL.' : 'Git & GitHub, Node.js & Express REST APIs, and relational SQL database modeling.'}
+              </p>
+            </div>
+
+            <div
+              onClick={() => setCurrentView('paths')}
+              className="p-6 rounded-3xl bg-[#FAF8F2] border border-[#dbe6df] hover:border-[#C6A34A] transition-all cursor-pointer shadow-2xs space-y-3 group"
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🚀</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C6A34A] text-white">
+                  {isAr ? 'المسار 3' : 'Track 3'}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-[#176B45] group-hover:text-[#0f482e] transition-colors">
+                {isAr ? 'التطوير الشامل والنشر (Full-Stack)' : 'Full-Stack & Cloud'}
+              </h3>
+              <p className="text-xs text-[#747C76] leading-relaxed">
+                {isAr ? 'دمج الواجهات مع الخادم وقاعدة البيانات، فحص الجودة والأمان، والنشر السحابي المباشر.' : 'End-to-end integration, automated testing, cloud deployment, and live capstone defense.'}
+              </p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.slice(0, 6).map((course) => (
               <div

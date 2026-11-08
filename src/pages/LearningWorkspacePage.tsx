@@ -144,13 +144,28 @@ export const LearningWorkspacePage: React.FC<LearningWorkspacePageProps> = ({
 
           {/* Course & Lesson Selection */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-[#176B45] hidden lg:inline">
-              {courseTitleDisplay}:
-            </span>
+            <select
+              value={selectedCourseId}
+              onChange={(e) => {
+                const newCourseId = e.target.value;
+                setSelectedCourseId(newCourseId);
+                const targetCourse = allAvailableCourses.find(c => c.id === newCourseId);
+                const firstLes = targetCourse?.modules?.[0]?.lessons?.[0]?.id;
+                if (firstLes) setSelectedLessonId(firstLes);
+              }}
+              className="bg-[#E8F2EC] border border-[#176B45]/30 text-[#176B45] rounded-lg px-2.5 py-1 text-xs font-bold max-w-[140px] sm:max-w-[200px] truncate focus:border-[#176B45] outline-hidden cursor-pointer"
+            >
+              {allAvailableCourses.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {language === 'en' && c.titleEn ? c.titleEn : c.title}
+                </option>
+              ))}
+            </select>
+
             <select
               value={selectedLessonId}
               onChange={(e) => setSelectedLessonId(e.target.value)}
-              className="bg-[#FAF8F2] border border-[#dbe6df] rounded-lg px-2.5 py-1 text-xs font-bold text-[#252B27] max-w-[200px] sm:max-w-[320px] truncate focus:border-[#176B45] outline-hidden"
+              className="bg-[#FAF8F2] border border-[#dbe6df] rounded-lg px-2.5 py-1 text-xs font-bold text-[#252B27] max-w-[150px] sm:max-w-[240px] truncate focus:border-[#176B45] outline-hidden cursor-pointer"
             >
               {allLessons.map((l, idx) => (
                 <option key={l.id} value={l.id}>

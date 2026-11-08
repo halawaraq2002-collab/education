@@ -5,7 +5,12 @@ import {
   BookOpen, 
   Clock, 
   GraduationCap, 
-  Play
+  Play, 
+  Layers, 
+  Sparkles,
+  Code2,
+  Server,
+  Rocket
 } from 'lucide-react';
 
 interface CoursesPageProps {
@@ -20,6 +25,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
   const { courses, userProfile, enrollCourse, language, t } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  const [selectedTrack, setSelectedTrack] = useState<string>('all');
 
   const isAr = language === 'ar';
 
@@ -38,7 +44,13 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
       (selectedLevel === 'intermediate' && (c.level === 'متوسط' || c.levelEn === 'Intermediate')) ||
       (selectedLevel === 'advanced' && (c.level === 'متقدم' || c.levelEn === 'Advanced'));
 
-    return matchesSearch && matchesLevel;
+    const matchesTrack =
+      selectedTrack === 'all' ||
+      (selectedTrack === 'frontend' && (c.track === 'frontend' || (!c.track && c.category.includes('الويب')))) ||
+      (selectedTrack === 'backend' && (c.track === 'backend' || c.category.includes('الواجهة الخلفية') || c.category.includes('قواعد'))) ||
+      (selectedTrack === 'fullstack' && (c.track === 'fullstack' || c.category.includes('مشروع')));
+
+    return matchesSearch && matchesLevel && matchesTrack;
   });
 
   const getCourseProgress = (courseId: string) => {
@@ -71,26 +83,79 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F2EC] text-[#176B45] text-xs font-bold mb-3">
               <GraduationCap className="w-4 h-4 text-[#C6A34A]" />
-              <span>{t('heroBadge')}</span>
+              <span>{isAr ? 'المنهج الشامل: من الصفر حتى بناء موقع متكامل ونشره' : 'Complete 11-Level Curriculum: Zero to Deployed Production Website'}</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#252B27]">
               {t('coursesPageTitle')}
             </h1>
-            <p className="text-sm text-[#747C76] mt-2 max-w-2xl">
-              {t('coursesPageSub')}
+            <p className="text-sm text-[#747C76] mt-2 max-w-2xl leading-relaxed">
+              {isAr
+                ? 'خطة دراسية متكاملة مقسمة إلى 3 مسارات رئيسية و 11 مستوى أكاديمي مع مشاريع عملية وتطبيقات برمجية في كل مرحلة.'
+                : 'A university curriculum divided into 3 specialized tracks and 11 progressive levels, with hands-on coding labs and real-world projects in every level.'}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="text-center bg-[#E8F2EC] px-4 py-3 rounded-2xl border border-[#176B45]/20">
               <div className="text-xl font-black text-[#176B45]">{courses.length}</div>
-              <div className="text-[11px] font-semibold text-[#252B27]">{t('coursesPageStatsCourses')}</div>
+              <div className="text-[11px] font-semibold text-[#252B27]">{isAr ? 'مستويات دراسية' : 'Academic Levels'}</div>
             </div>
             <div className="text-center bg-[#FAF8F2] px-4 py-3 rounded-2xl border border-[#C6A34A]/30">
-              <div className="text-xl font-black text-[#C6A34A]">100%</div>
-              <div className="text-[11px] font-semibold text-[#252B27]">{t('coursesPageStatsHandsOn')}</div>
+              <div className="text-xl font-black text-[#C6A34A]">3</div>
+              <div className="text-[11px] font-semibold text-[#252B27]">{isAr ? 'مسارات تخصصية' : 'Core Tracks'}</div>
             </div>
           </div>
+        </div>
+
+        {/* 3 Main Tracks Selector */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white p-2.5 rounded-2xl border border-[#dbe6df] shadow-2xs text-xs font-bold">
+          <button
+            onClick={() => setSelectedTrack('all')}
+            className={`py-3 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              selectedTrack === 'all'
+                ? 'bg-[#176B45] text-white shadow-sm'
+                : 'text-[#252B27] hover:bg-[#FAF8F2]'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span>{isAr ? 'كافة المقررات والمستويات' : 'All Levels & Tracks'} ({courses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setSelectedTrack('frontend')}
+            className={`py-3 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              selectedTrack === 'frontend'
+                ? 'bg-[#176B45] text-white shadow-sm'
+                : 'text-[#252B27] hover:bg-[#FAF8F2]'
+            }`}
+          >
+            <Code2 className="w-4 h-4 text-[#C6A34A]" />
+            <span>{isAr ? 'مسار الواجهات (Frontend)' : 'Frontend Track'}</span>
+          </button>
+
+          <button
+            onClick={() => setSelectedTrack('backend')}
+            className={`py-3 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              selectedTrack === 'backend'
+                ? 'bg-[#176B45] text-white shadow-sm'
+                : 'text-[#252B27] hover:bg-[#FAF8F2]'
+            }`}
+          >
+            <Server className="w-4 h-4 text-[#C6A34A]" />
+            <span>{isAr ? 'مسار الخادم والبيانات (Backend)' : 'Backend & DB Track'}</span>
+          </button>
+
+          <button
+            onClick={() => setSelectedTrack('fullstack')}
+            className={`py-3 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              selectedTrack === 'fullstack'
+                ? 'bg-[#176B45] text-white shadow-sm'
+                : 'text-[#252B27] hover:bg-[#FAF8F2]'
+            }`}
+          >
+            <Rocket className="w-4 h-4 text-[#C6A34A]" />
+            <span>{isAr ? 'مسار النشر والمشروع الشامل' : 'Full-Stack & Cloud'}</span>
+          </button>
         </div>
 
         {/* Filter and Search Bar */}
@@ -116,7 +181,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                   : 'bg-[#FAF8F2] text-[#252B27] hover:bg-[#E8F2EC]'
               }`}
             >
-              {t('filterAll')} ({courses.length})
+              {t('filterAll')}
             </button>
             <button
               onClick={() => setSelectedLevel('beginner')}
@@ -176,7 +241,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                         <BookOpen className="w-12 h-12 text-[#C6A34A]" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
 
                     <div className="absolute top-3 inset-x-3 flex justify-between items-start">
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[#FAF8F2] border border-white/30">
@@ -187,8 +252,8 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                       </span>
                     </div>
 
-                    <div className="absolute bottom-3 inset-x-3">
-                      <h3 className="text-lg font-bold text-white drop-shadow-sm leading-snug">
+                    <div className="absolute bottom-3 inset-x-3 text-start">
+                      <h3 className="text-base sm:text-lg font-bold text-white drop-shadow-sm leading-snug">
                         {isAr ? course.title : course.titleEn}
                       </h3>
                       <div className="text-[11px] text-white/70 font-mono tracking-wide" dir="ltr">
@@ -197,10 +262,23 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                     </div>
                   </div>
 
-                  <div className="p-6 space-y-4">
-                    <p className="text-xs sm:text-sm text-[#747C76] line-clamp-3 leading-relaxed">
+                  <div className="p-6 space-y-4 text-start">
+                    <p className="text-xs sm:text-sm text-[#747C76] line-clamp-2 leading-relaxed">
                       {isAr ? course.shortDescription : course.shortDescriptionEn}
                     </p>
+
+                    {/* Practical Hands-on Project Callout */}
+                    {course.practicalProject && (
+                      <div className="p-3 bg-[#FAF8F2] rounded-xl border border-[#C6A34A]/30 space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#176B45]">
+                          <Sparkles className="w-3.5 h-3.5 text-[#C6A34A]" />
+                          <span>{isAr ? 'المشروع العملي التطبيقي:' : 'Hands-on Project:'}</span>
+                        </div>
+                        <p className="text-xs text-[#252B27] font-semibold leading-relaxed line-clamp-1">
+                          {isAr ? course.practicalProject.title : course.practicalProject.titleEn}
+                        </p>
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#f1f4f2] text-xs text-[#252B27]">
                       <div className="flex items-center gap-2">
