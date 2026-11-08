@@ -111,7 +111,7 @@ export const AdminDashboardPage: React.FC = () => {
       learningObjectives: [
         newCourseForm.firstLessonObjective,
         'إتقان المهارات العملية والأكاديمية للمقرر',
-        'تطبيق مشروع تخرج مصغر في نهاية المسار',
+        'تطبيق مشروع برمجي متكامل في نهاية المسار',
       ],
       modules: [
         {
@@ -650,7 +650,7 @@ export const AdminDashboardPage: React.FC = () => {
                   >
                     <option value="مبتدئ">{language === 'ar' ? 'مبتدئ' : 'Beginner'}</option>
                     <option value="متوسط">{language === 'ar' ? 'متوسط' : 'Intermediate'}</option>
-                    <option value="متقدم">{language === 'ar' ? 'متقدم (مشروع تخرج)' : 'Advanced (Capstone)'}</option>
+                    <option value="متقدم">{language === 'ar' ? 'متقدم (مشروع شامل)' : 'Advanced (Capstone)'}</option>
                   </select>
                 </div>
 

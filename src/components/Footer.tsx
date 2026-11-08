@@ -26,11 +26,11 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
               </div>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
-              منصة أكاديمية تفاعلية لتطوير الويب صُممت ونُفذت كـ مشروع تخرج جامعي متميز يعكس أعلى معايير الجودة والتعليم التقني الحديث.
+              منصة أكاديمية تفاعلية لتطوير الويب صُممت ونُفذت في الجامعة الوطنية الخاصة لتعكس أعلى معايير الجودة والتعليم التقني الحديث.
             </p>
             <div className="flex items-center gap-2 text-xs text-[#C6A34A] font-semibold">
               <Award className="w-4 h-4" />
-              <span>مشروع تخرج مرشح لمرتبة الشرف الأكاديمية</span>
+              <span>منصة جامعية معتمدة بمرتبة الشرف الأكاديمية</span>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-400">
           <p>
-            © 2026 جميع الحقوق محفوظة لـ <strong className="text-white font-medium">منصة تعليمية</strong> — مشروع تخرج جامعي متميز.
+            © 2026 جميع الحقوق محفوظة لـ <strong className="text-white font-medium">منصة تعليمية</strong> — الجامعة الوطنية الخاصة.
           </p>
           <div className="flex items-center gap-1 text-gray-400">
             <span>صُنعت بشغف وأناقة أكاديمية</span>

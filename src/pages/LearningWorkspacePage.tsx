@@ -13,7 +13,9 @@ import {
   Lightbulb, 
   HelpCircle, 
   PanelLeftClose, 
-  PanelLeftOpen 
+  PanelLeftOpen,
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 
 interface LearningWorkspacePageProps {
@@ -121,15 +123,15 @@ export const LearningWorkspacePage: React.FC<LearningWorkspacePageProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToCourses}
-            className="p-1.5 rounded-lg border border-gray-200 hover:bg-[#E8F2EC] hover:text-[#176B45] text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-            title={t('backToCoursesList')}
+            className="px-3 py-1.5 rounded-lg border border-gray-300 hover:border-[#176B45] hover:bg-[#E8F2EC] text-[#176B45] text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs group"
+            title={language === 'ar' ? 'الرجوع إلى الصفحة السابقة' : 'Go back to previous page'}
           >
             {language === 'ar' ? (
-              <ChevronRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform text-[#176B45]" />
             ) : (
-              <ChevronLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform text-[#176B45]" />
             )}
-            <span className="hidden sm:inline">{t('backToCatalogBtn')}</span>
+            <span>{language === 'ar' ? 'رجوع للصفحة السابقة' : 'Back'}</span>
           </button>
 
           {/* Toggle instructions sidebar */}

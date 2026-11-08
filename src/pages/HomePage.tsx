@@ -535,8 +535,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
                 {isAr
-                  ? '"أفضل منصة أكاديمية ساعدتني في إنجاز مشروع تخرجي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."'
-                  : '"The best academic platform that guided me to finish my capstone project with distinction. Smooth progression from HTML to React."'}
+                  ? '"أفضل منصة أكاديمية ساعدتني في إتقان تطوير الويب وبناء موقع حقيقي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."'
+                  : '"The best academic platform that guided me to master web development and build a production web application. Smooth progression from HTML to React."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#C6A34A] text-white font-bold flex items-center justify-center text-sm">

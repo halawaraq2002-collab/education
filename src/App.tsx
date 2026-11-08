@@ -17,8 +17,9 @@ import { testFirestoreConnection } from './lib/firebase';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<string>('home');
-  const [selectedCourseId, setSelectedCourseId] = useState<string>('html-fundamentals');
-  const [selectedLessonId, setSelectedLessonId] = useState<string>('html-1');
+  const [viewHistory, setViewHistory] = useState<string[]>(['home']);
+  const [selectedCourseId, setSelectedCourseId] = useState<string>('web-fundamentals');
+  const [selectedLessonId, setSelectedLessonId] = useState<string>('wf-1');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
   // Test Firestore connection on app mount as required by firebase-integration skill
@@ -26,17 +27,41 @@ export default function App() {
     testFirestoreConnection();
   }, []);
 
+  const navigateToView = (v: string) => {
+    setViewHistory((prev) => (prev[prev.length - 1] === v ? prev : [...prev, v]));
+    setCurrentView(v);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleGoBack = () => {
+    if (viewHistory.length > 1) {
+      const updated = [...viewHistory];
+      updated.pop(); // remove active view
+      const previous = updated[updated.length - 1] || 'home';
+      setViewHistory(updated);
+      setCurrentView(previous);
+    } else {
+      // Intelligent fallback based on current view
+      if (currentView === 'workspace') {
+        setCurrentView('course-details');
+      } else if (currentView === 'course-details') {
+        setCurrentView('courses');
+      } else {
+        setCurrentView('home');
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSelectCourse = (courseId: string) => {
     setSelectedCourseId(courseId);
-    setCurrentView('course-details');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateToView('course-details');
   };
 
   const handleStartLesson = (courseId: string, lessonId: string) => {
     setSelectedCourseId(courseId);
     setSelectedLessonId(lessonId);
-    setCurrentView('workspace');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateToView('workspace');
   };
 
   const selectedCourse = initialCourses.find((c) => c.id === selectedCourseId) || initialCourses[0];
@@ -47,18 +72,17 @@ export default function App() {
         {/* Navigation Bar */}
         <Navbar
           currentView={currentView}
-          setCurrentView={(v) => {
-            setCurrentView(v);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
+          setCurrentView={navigateToView}
           openAuthModal={() => setIsAuthModalOpen(true)}
+          onGoBack={handleGoBack}
+          canGoBack={currentView !== 'home'}
         />
 
         {/* Dynamic Page View */}
         <main className="flex-1">
           {currentView === 'home' && (
             <HomePage
-              setCurrentView={setCurrentView}
+              setCurrentView={navigateToView}
               onSelectCourse={handleSelectCourse}
               openAuthModal={() => setIsAuthModalOpen(true)}
             />
@@ -74,7 +98,7 @@ export default function App() {
           {currentView === 'course-details' && (
             <CourseDetailsPage
               course={selectedCourse}
-              onBack={() => setCurrentView('courses')}
+              onBack={handleGoBack}
               onStartLesson={handleStartLesson}
             />
           )}
@@ -83,7 +107,7 @@ export default function App() {
             <LearningWorkspacePage
               initialCourseId={selectedCourseId}
               initialLessonId={selectedLessonId}
-              onBackToCourses={() => setCurrentView('courses')}
+              onBackToCourses={handleGoBack}
             />
           )}
 

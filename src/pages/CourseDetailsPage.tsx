@@ -14,7 +14,9 @@ import {
   ShieldCheck,
   Code2,
   FileQuestion,
-  Sparkles
+  Sparkles,
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 
 interface CourseDetailsPageProps {
@@ -46,19 +48,23 @@ export const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({
     });
   });
   const progressPercent = totalLessons ? Math.round((completedCount / totalLessons) * 100) : 0;
-  const firstLessonId = course.modules?.[0]?.lessons?.[0]?.id || 'html-1';
+  const firstLessonId = course.modules?.[0]?.lessons?.[0]?.id || 'wf-1';
 
   return (
     <div className="bg-[#FAF8F2] min-h-screen py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Breadcrumb / Back button */}
+        {/* Prominent Back Button */}
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#176B45] hover:text-[#0f482e] bg-white px-3.5 py-2 rounded-xl border border-[#dbe6df] shadow-2xs transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#176B45] hover:text-[#0f482e] bg-white px-4 py-2.5 rounded-xl border border-[#dbe6df] shadow-xs hover:shadow-sm hover:border-[#176B45]/50 transition-all cursor-pointer group"
         >
-          {isAr ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          <span>{t('backToCoursesList')}</span>
+          {isAr ? (
+            <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+          ) : (
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+          )}
+          <span>{isAr ? "الرجوع إلى الصفحة السابقة (المقررات)" : "Back to Previous Page (Courses)"}</span>
         </button>
 
         {/* Hero Course Header with Image */}
@@ -132,7 +138,7 @@ export const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 font-semibold">
                 <BookOpen className="w-4 h-4 text-[#176B45]" />
-                <span>{course.totalLessons} {t('lessonsCountSuffix')}</span>
+                <span>{totalLessons || course.totalLessons} {t('lessonsCountSuffix')}</span>
               </div>
               <div className="flex items-center gap-2 font-semibold">
                 <Clock className="w-4 h-4 text-[#C6A34A]" />

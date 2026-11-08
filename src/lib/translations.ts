@@ -83,7 +83,7 @@ export const translations = {
     filterAll: 'الكل',
     filterBeginner: 'مبتدئ',
     filterIntermediate: 'متوسط',
-    filterAdvanced: 'متقدم (مشروع تخرج)',
+    filterAdvanced: 'متقدم (مشروع شامل)',
     courseProgressLabel: 'مستوى الإنجاز في المقرر:',
     startCourseNow: 'ابدأ التعلم الآن',
     continueCourse: 'متابعة التعلم',
@@ -249,18 +249,18 @@ export const translations = {
     // Learning Paths Page
     roadmapTag: 'خارطة الطريق الأكاديمية لاحتراف تطوير الويب',
     roadmapTitle: 'المسار التخصصي المتكامل لتطوير الويب',
-    roadmapSub: 'منهج مصمم بعناية فائقة يضمن انتقال الطالب من المبادئ البرمجية الأساسية إلى الكفاءة الكاملة لإنجاز مشروع التخرج.',
+    roadmapSub: 'منهج مصمم بعناية فائقة يضمن انتقال الطالب من المبادئ البرمجية الأساسية إلى الكفاءة الكاملة لإنجاز مشروعه البرمجي الشامل.',
     exploreCurriculumBtn: 'استعراض المنهج والدروس',
     openEditorBtn: 'فتح المحرر',
 
     // About & Contact
-    aboutProjectBadge: 'مشروع تخرج جامعي متميز',
+    aboutProjectBadge: 'منصة أكاديمية جامعية رائدة',
     aboutTitle: 'عن "منصة تعليمية لتطوير مواقع الويب"',
-    aboutSub: 'مشروع تخرج نوعي تم تطويره ليكون نموذجاً رائداً لمنصات التعليم الإلكتروني الجامعي المتخصصة في علوم الحاسب وهندسة البرمجيات.',
+    aboutSub: 'منظومة تعليمية نوعية تم تطويرها لتكون نموذجاً رائداً لمنصات التعليم الإلكتروني الجامعي المتخصصة في علوم الحاسب وهندسة البرمجيات.',
     exploreAccreditedCoursesBtn: 'استكشف المقررات المعتمدة',
     contactDeanshipBadge: 'لجنة الإشراف الأكاديمي',
     contactTitle: 'تواصل مع المشرفين والعمادة',
-    contactSub: 'نرحب بملاحظات أساتذة الكلية واستفسارات الطلاب بخصوص مشاريع التخرج.',
+    contactSub: 'نرحب بملاحظات أساتذة الكلية واستفسارات الطلاب بخصوص المسارات البرمجية والمناهج.',
     contactInfoTitle: 'معلومات الاتصال الأكاديمية',
     officeHoursTitle: 'ساعات استقبال الطلاب:',
     officeHoursDesc: 'الأحد إلى الخميس: 09:00 ص - 02:00 م',
@@ -273,11 +273,11 @@ export const translations = {
     messageSuccessDesc: 'سيقوم المشرف الأكاديمي بالرد على بريدك خلال 24 ساعة عمل.',
 
     // Footer
-    footerAccreditedBadge: 'مشروع تخرج مرشح لمرتبة الشرف الأكاديمية',
+    footerAccreditedBadge: 'منصة جامعية معتمدة بمرتبة الشرف',
     footerCoursesColTitle: 'المقررات والمسارات',
     footerFeaturesColTitle: 'المزايا التعليمية',
     footerAccreditationColTitle: 'الاعتماد الأكاديمي',
-    footerCopyright: '© 2026 جميع الحقوق محفوظة لـ منصة تعليمية — مشروع تخرج جامعي متميز.',
+    footerCopyright: '© 2026 جميع الحقوق محفوظة لـ منصة تعليمية — الجامعة الوطنية الخاصة.',
     footerCraftedWith: 'صُنعت بشغف وأناقة أكاديمية لطلاب هندسة البرمجيات',
   },
 

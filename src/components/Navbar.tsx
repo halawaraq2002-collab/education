@@ -11,16 +11,20 @@ import {
   X,
   Globe,
   Award,
-  ChevronDown
+  ChevronDown,
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 
 interface NavbarProps {
   currentView: string;
   setCurrentView: (view: string) => void;
   openAuthModal: () => void;
+  onGoBack?: () => void;
+  canGoBack?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, openAuthModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, openAuthModal, onGoBack, canGoBack }) => {
   const { userProfile, signOutUser, language, setLanguage, loginAsDemoStudent, loginAsDemoAdmin, isAdmin, t } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -79,27 +83,46 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo */}
-          <div 
-            onClick={() => setCurrentView('home')} 
-            className="flex items-center gap-3.5 cursor-pointer group select-none"
-          >
-            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#176B45] to-[#0f482e] flex items-center justify-center shadow-md shadow-[#176B45]/20 group-hover:scale-105 transition-transform shrink-0">
-              <BookOpen className="w-6 h-6 text-white absolute" />
-              <GraduationCap className="w-4 h-4 text-[#C6A34A] absolute -top-1.5 -right-1.5 transform rotate-12 drop-shadow" />
-              <Code2 className="w-3.5 h-3.5 text-[#C6A34A] absolute -bottom-1 -left-1" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-[#176B45] font-['Cairo'] flex items-center gap-1.5">
-                {t('brandName')}
-                <span className="text-[#C6A34A] text-[10px] font-semibold px-1.5 py-0.2 rounded bg-[#FAF8F2] border border-[#C6A34A]/30">
-                  {t('brandTag')}
+          {/* Logo & Back Button */}
+          <div className="flex items-center gap-3">
+            <div 
+              onClick={() => setCurrentView('home')} 
+              className="flex items-center gap-3.5 cursor-pointer group select-none"
+            >
+              <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#176B45] to-[#0f482e] flex items-center justify-center shadow-md shadow-[#176B45]/20 group-hover:scale-105 transition-transform shrink-0">
+                <BookOpen className="w-6 h-6 text-white absolute" />
+                <GraduationCap className="w-4 h-4 text-[#C6A34A] absolute -top-1.5 -right-1.5 transform rotate-12 drop-shadow" />
+                <Code2 className="w-3.5 h-3.5 text-[#C6A34A] absolute -bottom-1 -left-1" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold tracking-tight text-[#176B45] font-['Cairo'] flex items-center gap-1.5">
+                  {t('brandName')}
+                  <span className="text-[#C6A34A] text-[10px] font-semibold px-1.5 py-0.2 rounded bg-[#FAF8F2] border border-[#C6A34A]/30">
+                    {t('brandTag')}
+                  </span>
                 </span>
-              </span>
-              <span className="text-[10px] tracking-widest text-[#747C76] font-semibold uppercase">
-                {t('brandSubtitle')}
-              </span>
+                <span className="text-[10px] tracking-widest text-[#747C76] font-semibold uppercase">
+                  {t('brandSubtitle')}
+                </span>
+              </div>
             </div>
+
+            {/* Prominent Back to Previous Page Button */}
+            {canGoBack && onGoBack && (
+              <button
+                onClick={onGoBack}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#dbe6df] bg-[#FAF8F2] hover:bg-[#E8F2EC] hover:border-[#176B45] text-[#176B45] text-xs font-bold transition-all cursor-pointer shadow-2xs group shrink-0"
+                title={isAr ? "الرجوع إلى الصفحة السابقة" : "Go back to previous page"}
+              >
+                {isAr ? (
+                  <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+                ) : (
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+                )}
+                <span className="hidden sm:inline">{isAr ? "رجوع للصفحة السابقة" : "Back"}</span>
+                <span className="sm:hidden">{isAr ? "رجوع" : "Back"}</span>
+              </button>
+            )}
           </div>
 
           {/* Desktop Navigation Links */}
@@ -242,6 +265,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, ope
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-[#E8F2EC] bg-white px-4 pt-3 pb-6 space-y-2">
+          {canGoBack && onGoBack && (
+            <button
+              onClick={() => {
+                onGoBack();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#FAF8F2] text-[#176B45] font-bold text-xs border border-[#176B45]/30 mb-2"
+            >
+              <div className="flex items-center gap-2">
+                {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+                <span>{isAr ? "الرجوع إلى الصفحة السابقة" : "Back to Previous Page"}</span>
+              </div>
+            </button>
+          )}
           {navLinks.map((link) => (
             <button
               key={link.id}

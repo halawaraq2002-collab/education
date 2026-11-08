@@ -283,7 +283,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                     <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#f1f4f2] text-xs text-[#252B27]">
                       <div className="flex items-center gap-2">
                         <BookOpen className="w-4 h-4 text-[#176B45]" />
-                        <span>{course.totalLessons} {t('lessonsCountSuffix')}</span>
+                        <span>{course.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || course.totalLessons} {t('lessonsCountSuffix')}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-[#C6A34A]" />

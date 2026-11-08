@@ -37,78 +37,1636 @@ export const initialCourses: Course[] = [
     ],
     modules: [
       {
-        title: 'الوحدة الأولى: معمارية الويب والبروتوكولات',
-        titleEn: 'Module 1: Web Architecture & Protocols',
+        title: 'الوحدة الأولى: بنية الإنترنت ونموذج العميل والخادم',
+        titleEn: 'Module 1: Internet Architecture & Client-Server',
         lessons: [
           {
             id: 'wf-1',
             courseId: 'web-fundamentals',
             moduleIndex: 1,
-            moduleTitle: 'معمارية الويب والبروتوكولات',
-            moduleTitleEn: 'Web Architecture & Protocols',
-            title: 'كيف يعمل الإنترنت والمتصفح من وراء الكواليس؟',
-            titleEn: 'How the Internet & Browsers Work Behind the Scenes',
+            moduleTitle: 'الوحدة الأولى: بنية الإنترنت ونموذج العميل والخادم',
+            moduleTitleEn: 'Module 1: Internet Architecture & Client-Server',
+            title: 'كيف يعمل الإنترنت ونموذج العميل والخادم (Client-Server)؟',
+            titleEn: 'How the Internet & Client-Server Model Work',
             duration: '35 دقيقة',
-            objective: 'اكتب كوداً يوضح دورة استدعاء الموارد وتفسير البروتوكولات عبر الويب.',
-            explanation: `
-عندما تكتب عنوان موقع في شريط المتصفح (مثل https://university.edu):
-1. يسأل المتصفح خادم DNS للبحث عن عنوان الـ IP المقابل لهذا النطاق.
-2. يرسل المتصفح طلب HTTP GET مشفراً عبر بروتوكول TLS/HTTPS إلى خادم الويب.
-3. يستقبل الخادم الطلب ويعيد ملف HTML، ثم يطلب المتصفح ملفات CSS وJS التابعة.
-4. يقوم محرك المتصفح ببناء شجرة الـ DOM وتطبيق قواعد CSSOM ثم رسم الصفحة للمستخدم.
-            `,
+            objective: 'فهم مسار حزم البيانات عبر شبكة الإنترنت وتطبيق نموذج العميل والخادم عملياً عبر محاكي شبكي تفاعلي.',
+            explanation: `• ما هو الإنترنت؟
+الإنترنت هو شبكة عالمية عملاقة من مليارات الحواسيب المتصلة عبر كابلات ألياف ضوئية عابرة للمحيطات، وأجهزة توجيه (Routers)، ومزودي خدمة الإنترنت (ISPs).
+
+• نموذج العميل والخادم (Client / Server Paradigm):
+1. العميل (Client): جهازك أو متصفح الويب الخاص بك، وظيفته إرسال طلب (Request) للحصول على صفحة أو مورد.
+2. الخادم (Server): حاسوب فائق الأداء مستضاف في مركز بيانات، يستمع دائماً على منافذ الشبكة (Port 80 / 443) ويعالج الطلبات ويعيد استجابة (Response).
+3. عنوان البروتوكول (IP Address): الرقم الفريد المخصص لكل جهاز متصل بالشبكة لتحديد وجهته بدقة.
+4. حزم البيانات (Packets): تقطيع الرسائل الكبيرة إلى حزم صغيرة تحمل أرقام تسلسل وعناوين المصدر والوجهة يعاد تجميعها في جهة الاستقبال.
+
+• التمرين التطبيقي العملي:
+1. انقر زر "إرسال طلب تجريبي (Send Packet)" في شاشة المعاينة الحية.
+2. راقب تدفق الحزمة عبر الراوتر وصولاً إلى الخادم وعودة رسالة التأكيد (200 OK).
+3. في ملف main.js، جرب تعديل قيمة customMessage أو زيادة سرعة الشبكة واضغط "تشغيل الكود".`,
             starterHtml: `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>كيف يعمل الويب | الجامعة الوطنية الخاصة</title>
+  <title>محاكي شبكة الإنترنت | الجامعة الوطنية الخاصة</title>
 </head>
 <body>
-  <header>
-    <h1>رحلة طلب الويب (HTTP Request Cycle)</h1>
-    <p>تعلم كيف يتواصل المتصفح مع الخوادم السحابية.</p>
-  </header>
-  <main>
-    <div class="step-card">
-      <h3>الخطوة 1: استعلام النطاق (DNS Lookup)</h3>
-      <p>تحويل الرابط النصي إلى عنوان بروتوكول رقمي (IP Address).</p>
+  <div class="network-lab">
+    <header class="lab-header">
+      <span class="badge">المستوى 1 · الدرس 1</span>
+      <h2>محاكي رحلة حزم البيانات ونموذج العميل والخادم</h2>
+      <p>عاين مسار الطلب من المتصفح عبر الموجهات إلى الخادم السحابي.</p>
+    </header>
+
+    <!-- Network Topology View -->
+    <div class="topology-grid">
+      <div class="node-card client-node active" id="clientNode">
+        <div class="node-icon">💻</div>
+        <div class="node-title">العميل (Client)</div>
+        <div class="node-ip">IP: 192.168.1.15</div>
+        <span class="node-tag">متصفح الويب</span>
+      </div>
+
+      <div class="connector">
+        <div class="packet" id="dataPacket"></div>
+        <div class="wire-line"></div>
+      </div>
+
+      <div class="node-card router-node" id="routerNode">
+        <div class="node-icon">📡</div>
+        <div class="node-title">الموجه (Router)</div>
+        <div class="node-ip">Gateway ISP</div>
+        <span class="node-tag">توجيه الحزم</span>
+      </div>
+
+      <div class="connector">
+        <div class="wire-line"></div>
+      </div>
+
+      <div class="node-card server-node" id="serverNode">
+        <div class="node-icon">🖥️</div>
+        <div class="node-title">خادم الويب (Server)</div>
+        <div class="node-ip">IP: 172.217.16.206</div>
+        <span class="node-tag">Port 443 (HTTPS)</span>
+      </div>
     </div>
-    <div class="step-card">
-      <h3>الخطوة 2: مصافحة الأمان (TLS Handshake)</h3>
-      <p>تشفير قناة الاتصال بشهادة SSL الرقمية لحماية بيانات الطلاب.</p>
+
+    <!-- Controls & Metrics -->
+    <div class="control-panel">
+      <button id="sendBtn" class="btn-primary">
+        🚀 إرسال حزمة بيانات (Send Request)
+      </button>
+      <div class="metrics">
+        <div class="metric-item">
+          <span class="label">حالة الاتصال:</span>
+          <span id="connStatus" class="value ok">جاهز للإرسال</span>
+        </div>
+        <div class="metric-item">
+          <span class="label">زمن الوصول (RTT):</span>
+          <span id="latencyMetric" class="value">-- ms</span>
+        </div>
+      </div>
     </div>
-    <div class="step-card">
-      <h3>الخطوة 3: بناء وتصيير الصفحة (DOM & CSSOM)</h3>
-      <p>رسم العناصر التفاعلية بسرعة وسلاسة على شاشة المستخدم.</p>
+
+    <!-- Live Transmission Log -->
+    <div class="log-box">
+      <div class="log-title">سجل تدفق البروتوكولات (Network Event Log):</div>
+      <div id="logContent" class="log-content">
+        <div class="log-line info">[00:00.00] تم تهيئة بروتوكول TCP/IP بنجاح.</div>
+      </div>
     </div>
-  </main>
+  </div>
 </body>
 </html>`,
             starterCss: `body {
   font-family: system-ui, -apple-system, sans-serif;
-  padding: 24px;
+  margin: 0;
+  padding: 20px;
   background-color: #FAF8F2;
   color: #252B27;
+  direction: rtl;
 }
-header {
-  border-bottom: 2px solid #176B45;
-  padding-bottom: 12px;
+.network-lab {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.lab-header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.topology-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #FAF8F2;
+  padding: 24px 16px;
+  border-radius: 12px;
+  border: 1px dashed #dbe6df;
+  margin-bottom: 20px;
+  position: relative;
+}
+.node-card {
+  background: white;
+  border: 2px solid #dbe6df;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+  width: 140px;
+  transition: all 0.3s;
+}
+.node-card.active {
+  border-color: #176B45;
+  box-shadow: 0 4px 12px rgba(23, 107, 69, 0.15);
+}
+.node-card.receiving {
+  border-color: #C6A34A;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(198, 163, 74, 0.3);
+}
+.node-icon { font-size: 28px; margin-bottom: 6px; }
+.node-title { font-weight: bold; font-size: 13px; color: #176B45; }
+.node-ip { font-family: monospace; font-size: 11px; color: #747C76; margin: 4px 0; }
+.node-tag { font-size: 10px; background: #FAF8F2; padding: 2px 6px; border-radius: 4px; color: #252B27; }
+
+.connector {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.wire-line {
+  width: 100%;
+  height: 3px;
+  background: #dbe6df;
+  border-radius: 2px;
+}
+.packet {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #C6A34A;
+  border-radius: 50%;
+  right: 0;
+  display: none;
+  box-shadow: 0 0 8px #C6A34A;
+}
+
+.control-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 20px;
 }
-h1 { color: #176B45; margin: 0 0 8px 0; }
-.step-card {
+.btn-primary {
+  background: #176B45;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: #0f482e; }
+.btn-primary:active { transform: scale(0.97); }
+.metrics { display: flex; gap: 16px; font-size: 12px; }
+.metric-item .label { color: #747C76; margin-left: 4px; }
+.metric-item .value { font-weight: bold; color: #176B45; font-family: monospace; }
+.metric-item .value.ok { color: #176B45; }
+
+.log-box {
+  background: #1a201c;
+  color: #a3e635;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: monospace;
+  font-size: 12px;
+}
+.log-title { color: #C6A34A; font-weight: bold; margin-bottom: 8px; font-family: sans-serif; }
+.log-content { height: 110px; overflow-y: auto; display: flex; flex-col; gap: 4px; direction: ltr; text-align: left; }
+.log-line.info { color: #cbd5e1; }
+.log-line.success { color: #4ade80; }
+.log-line.warn { color: #facc15; }`,
+            starterJs: `// محاكي إرسال حزم البيانات ونموذج Client-Server
+const sendBtn = document.getElementById('sendBtn');
+const clientNode = document.getElementById('clientNode');
+const routerNode = document.getElementById('routerNode');
+const serverNode = document.getElementById('serverNode');
+const dataPacket = document.getElementById('dataPacket');
+const connStatus = document.getElementById('connStatus');
+const latencyMetric = document.getElementById('latencyMetric');
+const logContent = document.getElementById('logContent');
+
+let isSending = false;
+
+function addLog(text, type = 'info') {
+  const line = document.createElement('div');
+  line.className = 'log-line ' + type;
+  const time = new Date().toLocaleTimeString('ar-SA', { hour12: false });
+  line.textContent = '[' + time + '] ' + text;
+  logContent.appendChild(line);
+  logContent.scrollTop = logContent.scrollHeight;
+  console.log(text);
+}
+
+sendBtn.addEventListener('click', function() {
+  if (isSending) return;
+  isSending = true;
+  sendBtn.disabled = true;
+  sendBtn.style.opacity = '0.6';
+
+  const startTime = performance.now();
+  connStatus.textContent = 'جاري إرسال طلب HTTP GET...';
+  connStatus.style.color = '#C6A34A';
+
+  addLog('Client (192.168.1.15): إنشاء اتصال TCP عبر Port 443...');
+  clientNode.classList.add('active');
+
+  // خطوة 1: الوصول إلى الراوتر
+  setTimeout(function() {
+    addLog('Router Gateway: فحص جدول التوجيه وحزم البيانات...');
+    routerNode.classList.add('receiving');
+  }, 400);
+
+  // خطوة 2: الوصول إلى الخادم
+  setTimeout(function() {
+    routerNode.classList.remove('receiving');
+    serverNode.classList.add('receiving');
+    addLog('Server (172.217.16.206): استلام الطلب ومعالجة الصفحة...');
+  }, 900);
+
+  // خطوة 3: عودة الاستجابة بنجاح
+  setTimeout(function() {
+    serverNode.classList.remove('receiving');
+    const endTime = performance.now();
+    const rtt = Math.round(endTime - startTime);
+
+    latencyMetric.textContent = rtt + ' ms';
+    connStatus.textContent = '200 OK - تم استلام المحتوى';
+    connStatus.style.color = '#176B45';
+
+    addLog('Server Response: HTTP/2 200 OK (Content-Type: text/html)', 'success');
+    addLog('Client: المتصفح يبدأ بناء شجرة عناصر الـ DOM الآن!', 'success');
+
+    isSending = false;
+    sendBtn.disabled = false;
+    sendBtn.style.opacity = '1';
+  }, 1500);
+});
+
+console.log("بيئة محاكاة شبكة الويب جاهزة للاختبار.");`,
+            expectedOutputHint: 'اضغط على زر "إرسال حزمة بيانات"، ثم جرب تعديل عنوان الـ IP أو حمولة الرسالة في ملف main.js واضغط "تشغيل الكود".'
+          },
+          {
+            id: 'wf-2',
+            courseId: 'web-fundamentals',
+            moduleIndex: 1,
+            moduleTitle: 'الوحدة الأولى: بنية الإنترنت ونموذج العميل والخادم',
+            moduleTitleEn: 'Module 1: Internet Architecture & Client-Server',
+            title: 'ما هو موقع الويب والفرق بين Frontend و Backend؟',
+            titleEn: 'What is a Website? Frontend vs Backend Architecture',
+            duration: '40 دقيقة',
+            objective: 'التمييز العملي بين ما يُنفذ في متصفح العميل (HTML, CSS, JS) وما يعالجه الخادم وقواعد البيانات عبر واجهات API.',
+            explanation: `• ما هو موقع الويب (Website)؟
+موقع الويب هو مجموعة متكاملة من الملفات البرمجية والصور المترابطة المستضافة على خادم ويب، والتي يتصفحها المستخدم عبر رابط URL.
+
+• ركائز الواجهة الأمامية (Frontend - Client Side):
+1. هيكل المحتوى (HTML): يحدد العناوين والفقرات والجداول والأزرار.
+2. التنسيق والجماليات (CSS): يحدد الألوان، الخطوط، التجاوب مع الجوال، والتحريك.
+3. التفاعل والسلوك (JavaScript): التحكم بالـ DOM، معالجة النقرات، وإرسال واستقبال البيانات بدون إعادة تحميل الصفحة.
+
+• مسؤوليات الواجهة الخلفية (Backend - Server Side):
+1. منطق الأعمال (Business Logic): معالجة العمليات الحسابية، فحص الشروط، وحماية البيانات السرية.
+2. قواعد البيانات (Database): تخزين بيانات الطلاب والمقررات واسترجاعها بسرعة عبر SQL/NoSQL.
+3. واجهات برمجة التطبيقات (APIs): تجهيز البيانات بصيغة JSON لتبادلها مع الواجهة الأمامية.
+
+• التمرين التطبيقي العملي:
+1. عاين بطاقة "بوابة الطالب الأكاديمية" في المعاينة.
+2. اضغط زر "جلب المقررات المسجلة من خادم الـ API".
+3. راقب كيف تستقبل الجافاسكريبت مصفوفة الـ JSON وترسم بطاقات الواجهة فوراً.
+4. أضف مقرراً جديداً إلى مصفوفة backendDatabase في ملف main.js واضغط "تشغيل الكود".`,
+            starterHtml: `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الواجهة الأمامية مقابل الخلفية | الجامعة الوطنية الخاصة</title>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <span class="badge">المستوى 1 · الدرس 2</span>
+      <h2>بوابة الطالب: تكامل الـ Frontend مع الـ Backend</h2>
+      <p>اكتشف كيف ترسم الواجهة الأمامية بيانات الـ JSON القادمة من الخادم.</p>
+    </header>
+
+    <!-- Architecture Tabs -->
+    <div class="tabs-nav">
+      <button id="tabUiBtn" class="tab-btn active">🎨 واجهة المستخدم (Frontend UI)</button>
+      <button id="tabJsonBtn" class="tab-btn">⚡ استجابة الخادم (Backend JSON)</button>
+    </div>
+
+    <!-- Frontend View -->
+    <div id="frontendView" class="view-panel">
+      <div class="action-bar">
+        <button id="fetchCoursesBtn" class="btn-primary">
+          📥 جلب بيانات المقررات (Fetch API Mock)
+        </button>
+        <span id="loadState" class="status-indicator">البيانات جاهزة للطلب</span>
+      </div>
+
+      <div id="coursesList" class="courses-grid">
+        <!-- Courses will be dynamically injected here -->
+        <div class="empty-state">اضغط الزر أعلاه لاستدعاء البيانات من الخادم السحابي...</div>
+      </div>
+    </div>
+
+    <!-- Backend JSON View -->
+    <div id="backendView" class="view-panel" style="display: none;">
+      <div class="json-header">
+        <span>Endpoint: GET /api/v1/students/courses</span>
+        <span class="status-200">200 OK</span>
+      </div>
+      <pre id="jsonPreview" class="json-box"></pre>
+    </div>
+  </div>
+</body>
+</html>`,
+            starterCss: `body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #FAF8F2;
+  color: #252B27;
+  direction: rtl;
+}
+.app-container {
+  max-width: 800px;
+  margin: 0 auto;
   background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.app-header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.tabs-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #E8F2EC;
+  padding-bottom: 8px;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #747C76;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: #E8F2EC;
+  color: #176B45;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.btn-primary {
+  background: #176B45;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #0f482e; }
+.status-indicator { font-size: 12px; color: #747C76; font-style: italic; }
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.course-card {
+  background: #FAF8F2;
   border: 1px solid #dbe6df;
   border-right: 4px solid #C6A34A;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  padding: 14px;
+  transition: transform 0.2s;
 }
-.step-card h3 { margin-top: 0; color: #176B45; }`,
-            starterJs: `console.log("تم تحميل بيئة فحص أساسيات الويب بنجاح.");
-console.log("حالة الاتصال: HTTP/2 200 OK");`,
-            expectedOutputHint: 'جرب إضافة خطوة رابعة بعنوان "الخطوة 4: تشغيل شيفرات JavaScript" واضغط زر تشغيل الكود.'
+.course-card:hover { transform: translateY(-2px); }
+.course-card h4 { margin: 0 0 6px 0; color: #176B45; font-size: 14px; }
+.course-card p { font-size: 11px; color: #747C76; margin: 0 0 10px 0; }
+.course-card .meta { display: flex; justify-content: space-between; font-size: 10px; font-weight: bold; color: #252B27; }
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px;
+  color: #747C76;
+  font-size: 13px;
+  background: #FAF8F2;
+  border-radius: 10px;
+  border: 1px dashed #dbe6df;
+}
+
+.json-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 8px 12px;
+  background: #1a201c;
+  color: #cbd5e1;
+  border-radius: 8px 8px 0 0;
+}
+.status-200 { color: #4ade80; font-weight: bold; }
+.json-box {
+  background: #131714;
+  color: #facc15;
+  padding: 16px;
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  direction: ltr;
+  text-align: left;
+}`,
+            starterJs: `// قاعدة بيانات افتراضية على الخادم (Backend Mock Database)
+const backendDatabase = [
+  {
+    id: "CS-101",
+    title: "أساسيات برمجة الويب",
+    credits: 3,
+    level: "مبتدئ",
+    instructor: "د. عبد الرحمن النجار"
+  },
+  {
+    id: "CS-202",
+    title: "تصميم واجهات المستخدم الحديثة",
+    credits: 3,
+    level: "متوسط",
+    instructor: "م. سارة القدسي"
+  },
+  {
+    id: "CS-305",
+    title: "قواعد البيانات وهندسة الـ SQL",
+    credits: 4,
+    level: "متقدم",
+    instructor: "د. كنان المصري"
+  }
+];
+
+const fetchCoursesBtn = document.getElementById('fetchCoursesBtn');
+const coursesList = document.getElementById('coursesList');
+const loadState = document.getElementById('loadState');
+const jsonPreview = document.getElementById('jsonPreview');
+const tabUiBtn = document.getElementById('tabUiBtn');
+const tabJsonBtn = document.getElementById('tabJsonBtn');
+const frontendView = document.getElementById('frontendView');
+const backendView = document.getElementById('backendView');
+
+// تحديث عرض الـ JSON مسبقاً
+jsonPreview.textContent = JSON.stringify(backendDatabase, null, 2);
+
+// محاكاة طلب Fetch API
+fetchCoursesBtn.addEventListener('click', function() {
+  loadState.textContent = 'جاري الاتصال بالخادم السحابي...';
+  loadState.style.color = '#C6A34A';
+  fetchCoursesBtn.disabled = true;
+
+  setTimeout(function() {
+    loadState.textContent = 'تم استلام بيانات الـ JSON بنجاح!';
+    loadState.style.color = '#176B45';
+    fetchCoursesBtn.disabled = false;
+
+    // تفريغ المحتوى ورسم بطاقات الـ Frontend
+    coursesList.innerHTML = '';
+    backendDatabase.forEach(function(course) {
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.innerHTML = 
+        '<h4>' + course.title + '</h4>' +
+        '<p>المدرس: ' + course.instructor + '</p>' +
+        '<div class="meta">' +
+          '<span>كود المادة: ' + course.id + '</span>' +
+          '<span>الساعات: ' + course.credits + '</span>' +
+        '</div>';
+      coursesList.appendChild(card);
+    });
+
+    console.log("تم تحويل بيانات JSON إلى عناصر DOM بنجاح:", backendDatabase);
+  }, 600);
+});
+
+// التبديل بين الواجهات
+tabUiBtn.addEventListener('click', function() {
+  tabUiBtn.classList.add('active');
+  tabJsonBtn.classList.remove('active');
+  frontendView.style.display = 'block';
+  backendView.style.display = 'none';
+});
+
+tabJsonBtn.addEventListener('click', function() {
+  tabJsonBtn.classList.add('active');
+  tabUiBtn.classList.remove('active');
+  frontendView.style.display = 'none';
+  backendView.style.display = 'block';
+});
+
+console.log("تم تجهيز واجهة المقارنة بين Frontend و Backend.");`,
+            expectedOutputHint: 'اضغط زر "جلب بيانات المقررات"، ثم بدل بين عرض الواجهة وعرض الـ JSON، وجرب إضافة مادة جديدة في مصفوفة backendDatabase في ملف main.js.'
+          }
+        ]
+      },
+      {
+        title: 'الوحدة الثانية: محركات التصفح والبروتوكولات',
+        titleEn: 'Module 2: Browser Engines & Protocols',
+        lessons: [
+          {
+            id: 'wf-3',
+            courseId: 'web-fundamentals',
+            moduleIndex: 2,
+            moduleTitle: 'الوحدة الثانية: محركات التصفح والبروتوكولات',
+            moduleTitleEn: 'Module 2: Browser Engines & Protocols',
+            title: 'كيف يعمل المتصفح ومحرك التصيير وشجرة الـ DOM؟',
+            titleEn: 'How Browsers Work: DOM Construction & Rendering Pipeline',
+            duration: '45 دقيقة',
+            objective: 'استيعاب مسار تصيير الويب (Critical Rendering Path) والتفاعل مع شجرة عناصر الـ DOM مباشرة.',
+            explanation: `• مسار تصيير الويب (Critical Rendering Path):
+كيف يحول المتصفح نصوص الأكواد إلى بكسلات ملونة على الشاشة؟
+1. التحليل اللغوي (HTML Parsing): يقرأ المتصفح ملف الـ HTML سطراً بسطر ويحول الوسوم إلى Tokens ثم Nodes لينشئ شجرة كائنات المستند DOM (Document Object Model).
+2. بناء شجرة الأنماط (CSSOM): قراءة قواعد الـ CSS وحساب الأنماط لكل عنصر.
+3. شجرة العرض (Render Tree): دمج الـ DOM والـ CSSOM لاختيار العناصر المرئية فقط واستبعاد ما يحمل \`display: none\`.
+4. حساب التخطيط (Layout / Reflow): حساب الإحداثيات الدقيقة والأبعاد والمواضع لكل عنصر على شاشة المستخدم.
+5. الرسم (Painting): تحويل العناصر إلى بكسلات وتمريرها إلى وحدة معالجة الرسوميات (GPU).
+
+• التمرين التطبيقي العملي:
+1. عاين شجرة عناصر الـ DOM التفاعلية في شاشة المعاينة.
+2. اكتب اسماً لعنصر جديد في صندوق النص واضغط "إضافة عقدة (Add DOM Node)".
+3. شاهد كيف يتم تحديث الشجرة وتحديث عداد العناصر فورياً بواسطة كود JavaScript.`,
+            starterHtml: `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مستكشف شجرة الـ DOM ومحرك التصيير</title>
+</head>
+<body>
+  <div class="dom-explorer">
+    <header class="header">
+      <span class="badge">المستوى 1 · الدرس 3</span>
+      <h2>محاكي بناء شجرة كائنات المستند (DOM Tree Construction)</h2>
+      <p>راقب كيف يبني المتصفح الشجرة الهرمية للعناصر وحدثها مباشرة.</p>
+    </header>
+
+    <!-- Controls to add DOM nodes -->
+    <div class="controls-card">
+      <div class="input-group">
+        <label>اسم العنصر الجديد:</label>
+        <input type="text" id="nodeNameInput" value="&lt;button&gt; زر تسجيل المقررات &lt;/button&gt;" />
+      </div>
+      <button id="addNodeBtn" class="btn-primary">
+        🌿 إضافة عقدة إلى شجرة الـ DOM
+      </button>
+    </div>
+
+    <!-- Visual DOM Tree Diagram -->
+    <div class="tree-canvas">
+      <div class="tree-node root">
+        <span class="tag">&lt;html&gt;</span>
+        <div class="branch">
+          <div class="tree-node head">
+            <span class="tag">&lt;head&gt;</span>
+            <div class="leaf">&lt;title&gt; الجامعة &lt;/title&gt;</div>
+          </div>
+          <div class="tree-node body" id="bodyNode">
+            <span class="tag">&lt;body&gt;</span>
+            <div id="dynamicNodesContainer" class="leaves-container">
+              <div class="leaf">&lt;header&gt; ترويسة الموقع &lt;/header&gt;</div>
+              <div class="leaf">&lt;main&gt; محتوى الصفحة &lt;/main&gt;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Stats -->
+    <div class="stats-footer">
+      <span>إجمالي العقد في المستند: <strong id="totalNodesCount" class="highlight">5</strong> عناصر</span>
+      <span class="hint">حالة الرسم: تم تصيير الـ DOM بنجاح 🟢</span>
+    </div>
+  </div>
+</body>
+</html>`,
+            starterCss: `body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #FAF8F2;
+  color: #252B27;
+  direction: rtl;
+}
+.dom-explorer {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.controls-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  background: #FAF8F2;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #dbe6df;
+  margin-bottom: 20px;
+}
+.input-group {
+  flex: 1;
+  min-width: 240px;
+}
+.input-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: #176B45;
+  margin-bottom: 6px;
+}
+.input-group input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #dbe6df;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: monospace;
+  box-sizing: border-box;
+}
+.btn-primary {
+  background: #176B45;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #0f482e; }
+
+.tree-canvas {
+  background: #1a201c;
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+}
+.tree-node {
+  margin-right: 16px;
+  position: relative;
+}
+.tag {
+  display: inline-block;
+  background: #176B45;
+  color: #FAF8F2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  border: 1px solid #C6A34A;
+}
+.branch {
+  margin-right: 24px;
+  border-right: 2px dashed #C6A34A;
+  padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.leaf {
+  background: #252e27;
+  color: #a3e635;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #36443a;
+  display: inline-block;
+  margin-bottom: 6px;
+  animation: fadeIn 0.3s ease;
+}
+.leaves-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.stats-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: #747C76;
+}
+.highlight { color: #176B45; font-size: 14px; }
+.hint { color: #176B45; font-weight: bold; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}`,
+            starterJs: `const addNodeBtn = document.getElementById('addNodeBtn');
+const nodeNameInput = document.getElementById('nodeNameInput');
+const dynamicNodesContainer = document.getElementById('dynamicNodesContainer');
+const totalNodesCount = document.getElementById('totalNodesCount');
+
+let currentCount = 5;
+
+addNodeBtn.addEventListener('click', function() {
+  const text = nodeNameInput.value.trim();
+  if (!text) return;
+
+  // إنشاء عنصر leaf جديد في شجرة الـ DOM
+  const newLeaf = document.createElement('div');
+  newLeaf.className = 'leaf';
+  newLeaf.textContent = text;
+  dynamicNodesContainer.appendChild(newLeaf);
+
+  currentCount++;
+  totalNodesCount.textContent = currentCount;
+
+  console.log("تمت إضافة عقدة DOM جديدة: " + text);
+  console.log("محرك المتصفح قام بعملية Reflow و Repaint بنجاح.");
+});
+
+console.log("مستكشف شجرة الـ DOM جاهز للعمل.");`,
+            expectedOutputHint: 'اكتب اسماً لأي وسم جديد في خانة الإدخال واضغط "إضافة عقدة إلى الـ DOM"، ولاحظ كيف يعيد المتصفح رسم الشجرة حياً.'
+          },
+          {
+            id: 'wf-4',
+            courseId: 'web-fundamentals',
+            moduleIndex: 2,
+            moduleTitle: 'الوحدة الثانية: محركات التصفح والبروتوكولات',
+            moduleTitleEn: 'Module 2: Browser Engines & Protocols',
+            title: 'بروتوكول HTTP وأفعال الطلبات ورموز الاستجابة (Status Codes)',
+            titleEn: 'HTTP Protocol: Request Methods & Status Codes (200, 404, 500)',
+            duration: '40 دقيقة',
+            objective: 'إتقان أفعال HTTP (GET, POST, DELETE) وفهم معاني وتصنيفات رموز الاستجابة (200, 201, 404, 500) عملياً.',
+            explanation: `• بروتوكول نقل النص الفائق (HTTP):
+هو حجر الأساس في اتصال الويب، يحدد قواعد صياغة الرسائل بين المتصفح والخادم.
+
+• أشهر أفعال الطلب (HTTP Methods):
+1. GET: قراءة واسترجاع الموارد من الخادم دون تعديلها.
+2. POST: إرسال بيانات جديدة لحفظها على الخادم (مثل إنشاء حساب أو تسجيل مادة).
+3. PUT / PATCH: تعديل بيانات موجودة مسبقاً.
+4. DELETE: حذف مورد محدد من الخادم.
+
+• رموز الحالة (HTTP Status Codes):
+- 2xx (Success): مثل 200 OK (نجاح تام)، 201 Created (تم إنشاء السجل بنجاح).
+- 3xx (Redirection): مثل 301 Moved Permanently (إعادة التوجيه لرابط جديد).
+- 4xx (Client Error): مثل 400 Bad Request، 404 Not Found (الملف غير موجود).
+- 5xx (Server Error): مثل 500 Internal Server Error (عطل برمجي في الخادم).
+
+• التمرين التطبيقي العملي:
+1. اختر الفعل (Method) ومسار الرابط (Endpoint) من قائمة المحاكي.
+2. اضغط "إرسال طلب HTTP" ولاحظ رمز الاستجابة ولونه والترويسات (Headers).
+3. جرب مسار غير موجود لاختبار حالة 404 Not Found.`,
+            starterHtml: `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مختبر بروتوكول HTTP | الجامعة الوطنية الخاصة</title>
+</head>
+<body>
+  <div class="http-tester">
+    <header class="header">
+      <span class="badge">المستوى 1 · الدرس 4</span>
+      <h2>أداة فحص واختبار طلبات HTTP ورموز الاستجابة</h2>
+      <p>أرسل طلبات تجريبية واستكشف ردود أفعال الخادم وأكواد الحالة.</p>
+    </header>
+
+    <!-- Request Builder Bar -->
+    <div class="request-builder">
+      <select id="methodSelect" class="method-select">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="DELETE">DELETE</option>
+      </select>
+      <input type="text" id="urlInput" value="/api/students/courses" class="url-input" />
+      <button id="sendHttpBtn" class="btn-send">إرسال الطلب ⚡</button>
+    </div>
+
+    <!-- Quick Test Scenarios -->
+    <div class="scenarios-bar">
+      <span>سيناريوهات سريعة:</span>
+      <button class="chip" onclick="setPreset('GET', '/api/students/courses')">200 OK (جلب المواد)</button>
+      <button class="chip" onclick="setPreset('POST', '/api/students/enroll')">201 Created (تسجيل)</button>
+      <button class="chip" onclick="setPreset('GET', '/api/invalid-page')">404 Not Found (غير موجود)</button>
+      <button class="chip" onclick="setPreset('POST', '/api/crash-server')">500 Server Error (عطل)</button>
+    </div>
+
+    <!-- Response Panel -->
+    <div class="response-card">
+      <div class="res-header">
+        <div class="status-badge" id="statusBadge">-- STATUS</div>
+        <span id="resTime" class="res-time">0 ms</span>
+      </div>
+      <div class="res-body">
+        <div class="section-label">ترويسات الاستجابة (Response Headers):</div>
+        <pre id="headersView" class="code-view">Content-Type: application/json\nServer: NPU-Cloud-Cluster</pre>
+        <div class="section-label">محتوى الاستجابة (Response Body):</div>
+        <pre id="payloadView" class="code-view json">{"message": "اضغط زر الإرسال لتنفيذ الطلب..."}</pre>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+            starterCss: `body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #FAF8F2;
+  color: #252B27;
+  direction: rtl;
+}
+.http-tester {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.request-builder {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.method-select {
+  padding: 10px 14px;
+  font-weight: bold;
+  font-size: 13px;
+  border: 1px solid #dbe6df;
+  border-radius: 8px;
+  background: #FAF8F2;
+  color: #176B45;
+  cursor: pointer;
+}
+.url-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-family: monospace;
+  font-size: 13px;
+  border: 1px solid #dbe6df;
+  border-radius: 8px;
+  direction: ltr;
+}
+.btn-send {
+  background: #176B45;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-send:hover { background: #0f482e; }
+
+.scenarios-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #747C76;
+  margin-bottom: 20px;
+}
+.chip {
+  background: #FAF8F2;
+  border: 1px solid #dbe6df;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  color: #252B27;
+  transition: all 0.2s;
+}
+.chip:hover {
+  background: #E8F2EC;
+  border-color: #176B45;
+  color: #176B45;
+}
+
+.response-card {
+  background: #1a201c;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.res-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #131714;
+  border-bottom: 1px solid #2a352e;
+}
+.status-badge {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #a3e635;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(163, 230, 53, 0.1);
+}
+.res-time { font-family: monospace; font-size: 11px; color: #747C76; }
+.res-body { padding: 16px; }
+.section-label { font-size: 11px; color: #C6A34A; margin-bottom: 4px; font-weight: bold; }
+.code-view {
+  background: #0f1311;
+  color: #e2e8f0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  margin-bottom: 12px;
+  direction: ltr;
+  text-align: left;
+  overflow-x: auto;
+}
+.code-view.json { color: #facc15; }`,
+            starterJs: `const methodSelect = document.getElementById('methodSelect');
+const urlInput = document.getElementById('urlInput');
+const sendHttpBtn = document.getElementById('sendHttpBtn');
+const statusBadge = document.getElementById('statusBadge');
+const resTime = document.getElementById('resTime');
+const headersView = document.getElementById('headersView');
+const payloadView = document.getElementById('payloadView');
+
+window.setPreset = function(method, url) {
+  methodSelect.value = method;
+  urlInput.value = url;
+};
+
+sendHttpBtn.addEventListener('click', function() {
+  const method = methodSelect.value;
+  const url = urlInput.value.trim();
+  const startTime = performance.now();
+
+  console.log("جاري إرسال الطلب: " + method + " " + url);
+
+  setTimeout(function() {
+    const elapsed = Math.round(performance.now() - startTime) + 35;
+    resTime.textContent = elapsed + " ms";
+
+    if (url.includes('invalid')) {
+      statusBadge.textContent = "404 Not Found";
+      statusBadge.style.color = "#fb923c";
+      statusBadge.style.background = "rgba(251, 146, 60, 0.1)";
+      headersView.textContent = "HTTP/1.1 404 Not Found\\nContent-Type: application/json\\nDate: " + new Date().toUTCString();
+      payloadView.textContent = JSON.stringify({ error: "المسار المطلوب غير موجود على الخادم", statusCode: 404 }, null, 2);
+    } else if (url.includes('crash')) {
+      statusBadge.textContent = "500 Internal Server Error";
+      statusBadge.style.color = "#f87171";
+      statusBadge.style.background = "rgba(248, 113, 113, 0.1)";
+      headersView.textContent = "HTTP/1.1 500 Internal Server Error\\nContent-Type: application/json";
+      payloadView.textContent = JSON.stringify({ error: "خطأ غير متوقع في قاعدة بيانات الخادم", statusCode: 500 }, null, 2);
+    } else if (method === 'POST') {
+      statusBadge.textContent = "201 Created";
+      statusBadge.style.color = "#4ade80";
+      statusBadge.style.background = "rgba(74, 222, 128, 0.1)";
+      headersView.textContent = "HTTP/1.1 201 Created\\nLocation: /api/students/enroll/982\\nContent-Type: application/json";
+      payloadView.textContent = JSON.stringify({ success: true, message: "تم تسجيل المقرر بنجاح في خطتك الأكاديمية" }, null, 2);
+    } else {
+      statusBadge.textContent = "200 OK";
+      statusBadge.style.color = "#4ade80";
+      statusBadge.style.background = "rgba(74, 222, 128, 0.1)";
+      headersView.textContent = "HTTP/1.1 200 OK\\nCache-Control: max-age=3600\\nContent-Type: application/json";
+      payloadView.textContent = JSON.stringify({ status: "success", totalCourses: 4, verified: true }, null, 2);
+    }
+
+    console.log("استجابة الخادم مكتملة:", statusBadge.textContent);
+  }, 250);
+});
+
+console.log("مختبر بروتوكول HTTP جاهز لتنفيذ طلباتك.");`,
+            expectedOutputHint: 'جرب اختيار أفعال مختلفة مثل POST أو مسار خاطئ لاختبار كود 404 Not Found، ثم عدّل دالة sendHttpRequest في main.js.'
+          }
+        ]
+      },
+      {
+        title: 'الوحدة الثالثة: النطاقات والاستضافة وأدوات التطوير',
+        titleEn: 'Module 3: Domains, Hosting & DevTools',
+        lessons: [
+          {
+            id: 'wf-5',
+            courseId: 'web-fundamentals',
+            moduleIndex: 3,
+            moduleTitle: 'الوحدة الثالثة: النطاقات والاستضافة وأدوات التطوير',
+            moduleTitleEn: 'Module 3: Domains, Hosting & DevTools',
+            title: 'أسماء النطاقات (DNS) والاستضافة السحابية والـ CDN',
+            titleEn: 'DNS Resolution, Cloud Hosting & CDN Caching',
+            duration: '40 دقيقة',
+            objective: 'فهم دورة استعلام الـ DNS وتأثير خوادم التخزين المؤقت CDN على تسريع تحميل صفحات الويب.',
+            explanation: `• كيف يترجم الـ DNS أسماء النطاقات؟
+عندما تكتب رابط الموقع: npu.edu.sy
+1. التحقق من الكاش المحلي (Local Cache): يتأكد المتصفح ونظام التشغيل إن كان قد زار الموقع حديثاً.
+2. خادم DNS Resolver (المزود): يتواصل مع الـ Root Nameservers.
+3. خوادم النطاق الأعلى (TLD Server): يبحث عن امتدادات مثل .edu أو .sy.
+4. خادم النطاق المعتمد (Authoritative DNS): يعيد عنوان الـ IP النهائي المقابل للموقع.
+
+• شبكات توصيل المحتوى (CDN - Content Delivery Network):
+هي شبكة خوادم سحابية موزعة جغرافياً في عواصم العالم، تحتفظ بنسخة مؤقتة (Cache) من ملفات الموقع الثابتة (HTML, CSS, JS, Images) وتقدمها من أقرب خادم جغرافي للطالب لتقليل زمن الاستجابة إلى أجزاء من الثانية.
+
+• التمرين التطبيقي العملي:
+1. انقر زر "بدء استعلام النطاق (DNS Lookup)".
+2. راقب خطوات الترجمة خطوة بخطوة حتى الحصول على عنوان IP.
+3. فعّل زر "استخدام شبكة CDN" ولاحظ كيف ينخفض زمن الاستجابة مباشرة.`,
+            starterHtml: `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>محاكي نظام أسماء النطاقات DNS والـ CDN</title>
+</head>
+<body>
+  <div class="dns-lab">
+    <header class="header">
+      <span class="badge">المستوى 1 · الدرس 5</span>
+      <h2>محاكي استعلام أسماء النطاقات (DNS Resolution & CDN)</h2>
+      <p>تتبع رحلة ترجمة اسم الموقع النصي إلى عنوان رقمي IP Address.</p>
+    </header>
+
+    <!-- Domain Input & Switcher -->
+    <div class="search-bar">
+      <input type="text" id="domainInput" value="npu.edu.sy" placeholder="اكتب اسم النطاق..." />
+      <button id="lookupBtn" class="btn-lookup">🔍 بدء استعلام DNS</button>
+      <label class="cdn-toggle">
+        <input type="checkbox" id="cdnToggle" />
+        <span>تفعيل تسريع CDN ⚡</span>
+      </label>
+    </div>
+
+    <!-- Resolution Steps Pipeline -->
+    <div class="steps-flow">
+      <div class="step-box" id="stepRoot">
+        <div class="step-num">1</div>
+        <div class="step-name">Root Server (.)</div>
+        <div class="step-desc">توجيه إلى نطاقات TLD</div>
+      </div>
+      <div class="arrow">➡️</div>
+      <div class="step-box" id="stepTld">
+        <div class="step-num">2</div>
+        <div class="step-name">TLD Server (.edu)</div>
+        <div class="step-desc">نطاقات التعليم العالي</div>
+      </div>
+      <div class="arrow">➡️</div>
+      <div class="step-box" id="stepAuth">
+        <div class="step-num">3</div>
+        <div class="step-name">Authoritative DNS</div>
+        <div class="step-desc">سجلات النطاق A Record</div>
+      </div>
+    </div>
+
+    <!-- Resolved Info Card -->
+    <div class="result-card">
+      <div class="result-item">
+        <span class="label">عنوان الـ IP المكتشف:</span>
+        <span id="ipResult" class="ip-code">194.126.15.42</span>
+      </div>
+      <div class="result-item">
+        <span class="label">زمن الاستعلام الكلي:</span>
+        <span id="dnsLatency" class="latency-code">180 ms</span>
+      </div>
+      <div class="result-item">
+        <span class="label">نوع الاستضافة:</span>
+        <span id="hostingType" class="host-badge">استضافة سحابية قياسية</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+            starterCss: `body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #FAF8F2;
+  color: #252B27;
+  direction: rtl;
+}
+.dns-lab {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.search-bar input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1px solid #dbe6df;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 13px;
+  direction: ltr;
+}
+.btn-lookup {
+  background: #176B45;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-lookup:hover { background: #0f482e; }
+
+.cdn-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #C6A34A;
+  background: #FAF8F2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #C6A34A;
+  cursor: pointer;
+}
+
+.steps-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.step-box {
+  flex: 1;
+  background: #FAF8F2;
+  border: 2px solid #dbe6df;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.step-box.highlight {
+  border-color: #176B45;
+  background: #E8F2EC;
+  box-shadow: 0 4px 12px rgba(23,107,69,0.15);
+}
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #176B45;
+  color: white;
+  margin: 0 auto 6px auto;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-name { font-weight: bold; font-size: 13px; color: #176B45; margin-bottom: 4px; }
+.step-desc { font-size: 11px; color: #747C76; }
+.arrow { font-size: 16px; color: #C6A34A; }
+
+.result-card {
+  background: #1a201c;
+  color: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.result-item .label { display: block; font-size: 11px; color: #747C76; margin-bottom: 4px; }
+.ip-code { font-family: monospace; font-size: 15px; font-weight: bold; color: #4ade80; }
+.latency-code { font-family: monospace; font-size: 15px; font-weight: bold; color: #facc15; }
+.host-badge { font-size: 12px; font-weight: bold; background: #2a352e; padding: 4px 10px; border-radius: 6px; color: #FAF8F2; }`,
+            starterJs: `const domainInput = document.getElementById('domainInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const cdnToggle = document.getElementById('cdnToggle');
+const stepRoot = document.getElementById('stepRoot');
+const stepTld = document.getElementById('stepTld');
+const stepAuth = document.getElementById('stepAuth');
+const ipResult = document.getElementById('ipResult');
+const dnsLatency = document.getElementById('dnsLatency');
+const hostingType = document.getElementById('hostingType');
+
+lookupBtn.addEventListener('click', function() {
+  const domain = domainInput.value.trim() || 'npu.edu.sy';
+  const isCdn = cdnToggle.checked;
+
+  lookupBtn.disabled = true;
+  stepRoot.classList.remove('highlight');
+  stepTld.classList.remove('highlight');
+  stepAuth.classList.remove('highlight');
+
+  console.log("بدء استعلام الـ DNS للنطاق: " + domain);
+
+  if (isCdn) {
+    // استجابة سريعة من الـ CDN Edge Cache
+    setTimeout(function() {
+      stepAuth.classList.add('highlight');
+      ipResult.textContent = "104.21.55.19 (Cloudflare CDN Edge)";
+      dnsLatency.textContent = "12 ms ⚡";
+      dnsLatency.style.color = "#4ade80";
+      hostingType.textContent = "شبكة توزيع محتوى CDN عالمية";
+      lookupBtn.disabled = false;
+      console.log("تم جلب عنوان IP فورياً من ذاكرة الـ Edge Cache في أقرب مركز بيانات محلي.");
+    }, 200);
+    return;
+  }
+
+  // محاكاة الاستعلام المتسلسل الكامل
+  setTimeout(function() {
+    stepRoot.classList.add('highlight');
+    console.log("1. استعلام خوادم الجذر Root Servers...");
+  }, 300);
+
+  setTimeout(function() {
+    stepTld.classList.add('highlight');
+    console.log("2. استعلام خوادم TLD (.edu)...");
+  }, 700);
+
+  setTimeout(function() {
+    stepAuth.classList.add('highlight');
+    ipResult.textContent = "194.126.15.42 (Origin Host)";
+    dnsLatency.textContent = "185 ms";
+    dnsLatency.style.color = "#facc15";
+    hostingType.textContent = "استضافة أصلية مركزية (Origin)";
+    lookupBtn.disabled = false;
+    console.log("3. تم الحصول على السجل النهائي A Record: " + domain + " -> 194.126.15.42");
+  }, 1100);
+});
+
+console.log("محاكي الـ DNS والـ CDN جاهز للاستخدام.");`,
+            expectedOutputHint: 'اكتب نطاقاً مثل npu.edu.sy واضغط "بدء الاستعلام"، ثم فعّل خيار CDN ولاحظ انخفاض زمن الاستجابة إلى 12ms.'
+          },
+          {
+            id: 'wf-6',
+            courseId: 'web-fundamentals',
+            moduleIndex: 3,
+            moduleTitle: 'الوحدة الثالثة: النطاقات والاستضافة وأدوات التطوير',
+            moduleTitleEn: 'Module 3: Domains, Hosting & DevTools',
+            title: 'أدوات مطور الويب (DevTools) وفحص العناصر والكونسول',
+            titleEn: 'Browser DevTools: Inspect Elements, Network, and Console Debugging',
+            duration: '50 دقيقة',
+            objective: 'الاحتراف العملي لأدوات المطور في المتصفح، فحص شجرة العناصر وتعديلها فورياً، وتتبع وحل أخطاء JavaScript.',
+            explanation: `• ما هي أدوات المطور (Browser DevTools)؟
+هي لوحة أدوات برمجية مدمجة في كافة المتصفحات الحديثة (تُفتح بضغط F12 أو Right Click -> Inspect).
+
+• الأقسام الرئيسية لأدوات المطور:
+1. تبويب العناصر (Elements / Inspector):
+   - استعراض شجرة الـ DOM وتعديل نصوصها أو وسومها فورياً.
+   - فحص وتعديل تنسيقات الـ CSS ونموذج الصندوق (Box Model: Margin, Border, Padding, Content).
+2. تبويب وحدة التحكم (Console):
+   - طباعة مخرجات الكود: console.log()
+   - إظهار التحذيرات: console.warn()
+   - رصد وتصحيح الأخطاء: console.error()
+   - تنفيذ أوامر JavaScript واختبار الدوال الحسابية والتفاعلية.
+3. تبويب الشبكة (Network):
+   - مراقبة زمن تنزيل ملفات الموقع، حجم الحزم، وأكواد استجابة الخادم.
+
+• التمرين التطبيقي العملي:
+1. جرب تحريك منزلقات الـ CSS (Padding & Margin) ولاحظ التغير المباشر على بطاقة المعاينة (Box Model).
+2. اضغط أزرار الكونسول وشاهد الرسائل تظهر فوراً في نافذة الكونسول بالأسفل.
+3. اضغط زر "إصلاح الخطأ البرمجي" لتنفيذ كود مصحح يحل المشكلة البرمجية دون توقف الصفحة.`,
+            starterHtml: `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مختبر أدوات المطور وفحص الصندوق</title>
+</head>
+<body>
+  <div class="devtools-lab">
+    <header class="header">
+      <span class="badge">المستوى 1 · الدرس 6</span>
+      <h2>محاكي أدوات المطور (DevTools & Box Model Inspector)</h2>
+      <p>تفاعل مع نموذج الصندوق واختبر أدوات فحص وتصحيح الكونسول.</p>
+    </header>
+
+    <!-- Interactive Box Model Controls -->
+    <div class="controls-grid">
+      <div class="control-card">
+        <h4>🎛️ أداة فحص CSS الحية (Live Style Inspector)</h4>
+        <div class="slider-group">
+          <label>الحشوة الداخلية (Padding): <span id="paddingVal">18px</span></label>
+          <input type="range" id="paddingSlider" min="5" max="40" value="18" />
+        </div>
+        <div class="slider-group">
+          <label>الهامش الخارجي (Margin): <span id="marginVal">12px</span></label>
+          <input type="range" id="marginSlider" min="0" max="30" value="12" />
+        </div>
+      </div>
+
+      <div class="control-card">
+        <h4>🧪 اختبار رسائل الكونسول (Console API)</h4>
+        <div class="console-actions">
+          <button id="btnLog" class="btn-console log">console.log()</button>
+          <button id="btnWarn" class="btn-console warn">console.warn()</button>
+          <button id="btnErr" class="btn-console err">console.error()</button>
+          <button id="btnFix" class="btn-console fix">🛠️ إصلاح خطأ برمجي</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Box Model Diagram -->
+    <div class="preview-stage">
+      <div class="box-model-demo" id="targetElement">
+        <div class="box-label">عنصر الاختبار: بطاقة مقرر تطوير الويب</div>
+        <p class="box-desc">هذا النص يتأثر مباشرة بتغيير قيم الحشوة والهوامش في نموذج الصندوق.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+            starterCss: `body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #FAF8F2;
+  color: #252B27;
+  direction: rtl;
+}
+.devtools-lab {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #dbe6df;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.header {
+  border-bottom: 2px solid #E8F2EC;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+.badge {
+  background: #E8F2EC;
+  color: #176B45;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+h2 { color: #176B45; margin: 0 0 6px 0; font-size: 20px; }
+p { color: #747C76; margin: 0; font-size: 13px; }
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.control-card {
+  background: #FAF8F2;
+  border: 1px solid #dbe6df;
+  border-radius: 12px;
+  padding: 16px;
+}
+.control-card h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #176B45;
+}
+.slider-group {
+  margin-bottom: 10px;
+}
+.slider-group label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: bold;
+  color: #252B27;
+  margin-bottom: 4px;
+}
+.slider-group input {
+  width: 100%;
+  accent-color: #176B45;
+  cursor: pointer;
+}
+
+.console-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.btn-console {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-console:hover { opacity: 0.9; }
+.btn-console.log { background: #176B45; color: white; }
+.btn-console.warn { background: #C6A34A; color: white; }
+.btn-console.err { background: #dc2626; color: white; }
+.btn-console.fix { background: #2563eb; color: white; grid-column: span 2; font-family: sans-serif; }
+
+.preview-stage {
+  background: #FAF8F2;
+  border: 2px dashed #dbe6df;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-model-demo {
+  background: white;
+  border: 3px solid #176B45;
+  border-radius: 10px;
+  padding: 18px;
+  margin: 12px;
+  max-width: 360px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: padding 0.15s, margin 0.15s;
+}
+.box-label { font-weight: bold; font-size: 14px; color: #176B45; margin-bottom: 6px; }
+.box-desc { font-size: 12px; color: #747C76; margin: 0; line-height: 1.5; }`,
+            starterJs: `const paddingSlider = document.getElementById('paddingSlider');
+const marginSlider = document.getElementById('marginSlider');
+const paddingVal = document.getElementById('paddingVal');
+const marginVal = document.getElementById('marginVal');
+const targetElement = document.getElementById('targetElement');
+
+const btnLog = document.getElementById('btnLog');
+const btnWarn = document.getElementById('btnWarn');
+const btnErr = document.getElementById('btnErr');
+const btnFix = document.getElementById('btnFix');
+
+// التحكم المباشر بـ Box Model
+paddingSlider.addEventListener('input', function(e) {
+  const val = e.target.value + 'px';
+  paddingVal.textContent = val;
+  targetElement.style.padding = val;
+});
+
+marginSlider.addEventListener('input', function(e) {
+  const val = e.target.value + 'px';
+  marginVal.textContent = val;
+  targetElement.style.margin = val;
+});
+
+// رسائل الكونسول
+btnLog.addEventListener('click', function() {
+  console.log("معلومات DevTools: تم فحص أبعاد الصندوق الحالية بنجاح.");
+});
+
+btnWarn.addEventListener('click', function() {
+  console.warn("تحذير أداء: تأكد من تقليل الصور الكبيرة لتسريع تحميل الصفحة.");
+});
+
+btnErr.addEventListener('click', function() {
+  console.error("خطأ تجريبي (TypeError): الدالة غير معرفة، تحقق من السطر البرمجي.");
+});
+
+btnFix.addEventListener('click', function() {
+  console.log("تم تطبيق الإصلاح البرمجي بنجاح: تم تعريف المتغير وإلغاء استثناء الخطأ!");
+  alert("تهانينا! قمت باكتشاف الخطأ في الكونسول وإصلاحه.");
+});
+
+console.log("مختبر أدوات المطور DevTools جاهز للفحص والتشغيل.");`,
+            expectedOutputHint: 'حرّك منزلقات الهوامش لتغيير الـ Box Model مباشرة، واضغط أزرار الكونسول وشاهد المخرجات في لوحة الكونسول بالأسفل.'
           }
         ]
       }

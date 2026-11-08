@@ -43,6 +43,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const [isConsoleOpen, setIsConsoleOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const [lastRunTime, setLastRunTime] = useState<string>('');
+  const [runSuccessToast, setRunSuccessToast] = useState<string>('');
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -51,6 +52,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     setCode(initialCode);
     updatePreview(initialCode);
   }, [initialCode]);
+
+  // Keyboard shortcut Ctrl+Enter or Cmd+Enter to execute code
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleRunCode();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [code]);
 
   // Listen to messages from the sandbox iframe
   useEffect(() => {
@@ -116,6 +129,15 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                 }, '*');
               };
 
+              window.alert = function(msg) {
+                origLog.apply(console, ['[تنبيه]: ' + msg]);
+                window.parent.postMessage({
+                  source: 'academic-iframe-console',
+                  type: 'log',
+                  message: '🔔 [تنبيه النافذة]: ' + msg
+                }, '*');
+              };
+
               window.onerror = function(message, source, lineno, colno, error) {
                 window.parent.postMessage({
                   source: 'academic-iframe-console',
@@ -146,6 +168,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const handleRunCode = () => {
     setConsoleLogs([]);
     updatePreview(code);
+    setRunSuccessToast('تم تشغيل الكود وتحديث شاشة المعاينة الحية بنجاح 🟢');
+    setTimeout(() => setRunSuccessToast(''), 3000);
   };
 
   const handleResetCode = () => {
@@ -374,11 +398,17 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
           {/* Iframe Preview Container */}
           <div className="flex-1 bg-[#ffffff] overflow-auto flex justify-center items-start p-2 relative">
+            {runSuccessToast && (
+              <div className="absolute top-4 z-20 bg-[#176B45] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 animate-bounce">
+                <CheckCircle2 className="w-4 h-4 text-[#C6A34A]" />
+                <span>{runSuccessToast}</span>
+              </div>
+            )}
             <iframe
               ref={iframeRef}
               srcDoc={srcDoc}
               title="Live Academic Preview"
-              sandbox="allow-scripts allow-modals allow-same-origin"
+              sandbox="allow-scripts allow-modals allow-same-origin allow-forms allow-popups"
               className={`h-full border-0 bg-white transition-all shadow-md ${getDeviceWidthClass()}`}
             />
           </div>

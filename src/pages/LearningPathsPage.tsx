@@ -218,16 +218,16 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
       step: 11,
       track: 'fullstack',
       courseId: 'frontend-fullstack',
-      titleAr: 'المستوى الحادي عشر: المشروع النهائي الشامل (Final Graduation Project)',
-      titleEn: 'Level 11: Final Graduation Project – Full-Stack Web Platform',
+      titleAr: 'المستوى الحادي عشر: المشروع النهائي الشامل (Final Capstone Platform)',
+      titleEn: 'Level 11: Final Capstone Web Platform – Full-Stack System',
       descriptionAr: 'جمع كافة المهارات التي تعلمها الطالب لبناء منصة تعليمية إلكترونية متكاملة مع محرر أكواد ومساعد ذكاء اصطناعي وقاعدة بيانات.',
       descriptionEn: 'Integrate the complete stack: responsive UI, REST API, database, auth, AI tutor, and cloud deploy.',
-      projectAr: 'مشروع التخرج النهائي: منصة تعليمية إلكترونية متكاملة جاهزة للاستخدام والمناقشة والاعتماد النهائي.',
-      projectEn: 'Final Graduation Project: A production-ready educational platform with live coding IDE and AI mentor.',
+      projectAr: 'المشروع البرمجي الشامل النهائي: منصة تعليمية إلكترونية متكاملة جاهزة للاستخدام والنشر السحابي الكامل.',
+      projectEn: 'Final Capstone Project: A production-ready educational platform with live coding IDE and AI mentor.',
       durationAr: '35 ساعة',
       durationEn: '35 Hours',
-      levelAr: 'مشروع التخرج الأكاديمي',
-      levelEn: 'Academic Capstone Level',
+      levelAr: 'مستوى متقدم احترافي',
+      levelEn: 'Advanced Professional Level',
     },
   ];
 
@@ -238,8 +238,23 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
 
   return (
     <div className="bg-[#FAF8F2] min-h-screen py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
+        {/* Back Button */}
+        <div>
+          <button
+            onClick={() => setCurrentView('home')}
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#176B45] hover:text-[#0f482e] bg-white px-4 py-2.5 rounded-xl border border-[#dbe6df] shadow-xs hover:shadow-sm hover:border-[#176B45]/50 transition-all cursor-pointer group"
+          >
+            {isAr ? (
+              <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+            ) : (
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform text-[#176B45]" />
+            )}
+            <span>{isAr ? "الرجوع إلى الصفحة السابقة (الرئيسية)" : "Back to Home Page"}</span>
+          </button>
+        </div>
+
         {/* Header */}
         <div className="bg-white p-8 sm:p-10 rounded-3xl border border-[#dbe6df] shadow-xs text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F2EC] text-[#176B45] text-xs font-bold">
