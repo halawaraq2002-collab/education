@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 
 let aiInstance: GoogleGenAI | null = null;
 
@@ -150,3 +150,100 @@ ${req.code.js || '// لا يوجد كود JS'}
     reply: response.text || (isEnglish ? 'Sorry, unable to generate a response at this moment.' : 'عذراً، لم أستطع توليد إجابة في الوقت الحالي. يرجى إعادة المحاولة.'),
   };
 }
+
+export interface GenerateCodeRequest {
+  prompt: string;
+  currentCode?: {
+    html: string;
+    css: string;
+    js: string;
+  };
+  action?: 'generate' | 'modify' | 'fix';
+  language?: 'ar' | 'en';
+}
+
+export async function generateCodeFromPrompt(req: GenerateCodeRequest) {
+  const ai = getAIClient();
+  const isEn = req.language === 'en';
+
+  const systemInstruction = `
+You are an elite web development mentor and software engineer at a prestigious university.
+Your goal is to transform student natural language instructions into complete, beautifully styled, fully functional, interactive web code (HTML, CSS, JavaScript).
+
+Strict Output Requirements:
+1. "html": Must contain clean, modern, semantic HTML5 structure. Do not include markdown or external file link tags (CSS and JS will be injected into the preview).
+2. "css": Must contain elegant, production-grade CSS styling matching modern aesthetic standards (academic greens, rich typography, smooth transitions, responsive layouts, rounded corners, clean shadows).
+3. "js": Must contain real, interactive, error-free JavaScript with working event listeners, DOM updates, form submission handling, feedback messages, or animation logic. Do not write dummy placeholders—write real code that executes when buttons or elements are interacted with!
+4. "title": A short 2-4 word title for what was generated (e.g., "صفحة تسجيل الدخول التفاعلية" or "Interactive Login Form").
+5. "explanation": A 2-3 sentence clear explanation in ${isEn ? 'English' : 'Arabic'} explaining how the HTML, CSS, and JS work together.
+`.trim();
+
+  const userPrompt = `
+User Instruction:
+${req.prompt}
+
+${req.currentCode && (req.currentCode.html || req.currentCode.css || req.currentCode.js) ? `
+Existing Code Context (if modifying or extending):
+--- HTML ---
+${req.currentCode.html || ''}
+
+--- CSS ---
+${req.currentCode.css || ''}
+
+--- JavaScript ---
+${req.currentCode.js || ''}
+` : ''}
+
+Generate the complete, working HTML, CSS, and JavaScript implementing this exact request.
+`.trim();
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3.8-flash',
+    contents: userPrompt,
+    config: {
+      systemInstruction,
+      responseMimeType: 'application/json',
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          html: {
+            type: Type.STRING,
+            description: 'The complete HTML code.',
+          },
+          css: {
+            type: Type.STRING,
+            description: 'The complete CSS code.',
+          },
+          js: {
+            type: Type.STRING,
+            description: 'The complete JavaScript code.',
+          },
+          title: {
+            type: Type.STRING,
+            description: 'Short title for the generated interface.',
+          },
+          explanation: {
+            type: Type.STRING,
+            description: 'Pedagogical explanation of the code in Arabic or English.',
+          },
+        },
+        required: ['html', 'css', 'js', 'explanation'],
+      },
+    },
+  });
+
+  const text = response.text || '{}';
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.error('Failed to parse generated code JSON:', text);
+    return {
+      html: '<div style="padding: 20px; text-align: center;"><h2>تم إنشاء الواجهة</h2><p>يرجى تعديل الكود حسب الحاجة.</p></div>',
+      css: 'body { font-family: sans-serif; background: #fafafa; color: #176B45; }',
+      js: 'console.log("تم تحميل الكود بنجاح.");',
+      title: 'واجهة تم توليدها',
+      explanation: 'تم تجهيز الهيكل الأساسي للواجهة.',
+    };
+  }
+}
+

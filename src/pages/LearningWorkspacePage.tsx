@@ -304,6 +304,7 @@ export const LearningWorkspacePage: React.FC<LearningWorkspacePageProps> = ({
             onCodeChange={(newCode) => setCode(newCode)}
             onAskAiWithCode={handleAskAiWithCode}
             lessonObjective={currentLesson.objective}
+            lessonId={currentLesson.id}
           />
         </div>
 
