@@ -44,13 +44,13 @@ export const ContactPage: React.FC = () => {
                 <MapPin className="w-4 h-4 text-[#C6A34A] shrink-0 mt-0.5" />
                 <span>
                   {language === 'ar'
-                    ? 'المملكة العربية السعودية، جامعة المستقبل الأهلية، مبنى كلية علوم الحاسب'
-                    : 'Kingdom of Saudi Arabia, Future University, Faculty of Computer Science Building'}
+                    ? 'المملكة العربية السعودية، الجامعة الوطنية الخاصة، مبنى كلية علوم الحاسب'
+                    : 'Kingdom of Saudi Arabia, National Private University, Faculty of Computer Science Building'}
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#C6A34A] shrink-0" />
-                <span className="font-mono">cs-graduation@future-university.edu.sa</span>
+                <span className="font-mono">cs-graduation@national-university.edu.sa</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-[#C6A34A] shrink-0" />

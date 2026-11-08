@@ -109,11 +109,11 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             <div className="space-y-3 text-sm text-gray-300">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C6A34A] shrink-0 mt-1" />
-                <span>المملكة العربية السعودية، جامعة المستقبل الأهلية، كلية علوم الحاسب</span>
+                <span>المملكة العربية السعودية، الجامعة الوطنية الخاصة، كلية علوم الحاسب</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#C6A34A] shrink-0" />
-                <span className="font-mono text-xs">cs-graduation@future-university.edu.sa</span>
+                <span className="font-mono text-xs">cs-graduation@national-university.edu.sa</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#C6A34A] shrink-0" />

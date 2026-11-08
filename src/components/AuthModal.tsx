@@ -73,7 +73,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             {tab === 'forgot' && 'استعادة كلمة المرور'}
           </h3>
           <p className="text-xs text-white/80 mt-1">
-            بوابة الطلاب والمشرفين — جامعة المستقبل الأهلية
+            بوابة الطلاب والمشرفين — الجامعة الوطنية الخاصة
           </p>
         </div>
 

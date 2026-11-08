@@ -31,7 +31,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
     displayName: isAr ? 'أحمد بن عبد الرحمن الأكاديمي' : 'Ahmed Al-Akademi',
     email: 'student@university.edu.sa',
     academicId: 'CS-2026-8841',
-    university: 'جامعة المستقبل الأهلية',
+    university: 'الجامعة الوطنية الخاصة',
     role: 'student' as const,
     enrolledCourseIds: ['html-fundamentals', 'css-responsive', 'javascript-programming'],
     completedLessonIds: ['html-1'],
@@ -100,7 +100,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
               <p className="text-xs text-[#747C76] mt-1 flex flex-wrap items-center gap-3">
                 <span>{t('academicIdPrefix')} <strong className="font-mono text-[#176B45]">{profile.academicId || 'CS-2026-8841'}</strong></span>
                 <span>•</span>
-                <span>{profile.university || (isAr ? 'جامعة المستقبل الأهلية' : 'Future University')}</span>
+                <span>{profile.university || (isAr ? 'الجامعة الوطنية الخاصة' : 'National Private University')}</span>
               </p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
                           ></div>
                         </div>
                         <div className="text-[11px] text-[#747C76] flex items-center gap-3">
-                          <span>{t('lessonsCompletedRatio')(courseCompletedCount, courseLessonsCount)}</span>
+                          <span>{isAr ? `${courseCompletedCount} من ${courseLessonsCount} دروس مكتملة` : `${courseCompletedCount} of ${courseLessonsCount} lessons completed`}</span>
                           <span>•</span>
                           <span>{t('progressRatePrefix')} {progress}%</span>
                         </div>

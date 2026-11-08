@@ -6,7 +6,7 @@ export const translations = {
     brandName: 'منصة تعليمية',
     brandSubtitle: 'EDUCATIONAL PLATFORM',
     brandTag: 'جامعية',
-    universityTitle: 'جامعة المستقبل الأهلية — مشروع تخرج معتمد',
+    universityTitle: 'الجامعة الوطنية الخاصة',
     demoMode: 'الوضع التجريبي:',
     demoStudent: 'طالب',
     demoAdmin: 'مشرف أكاديمي',
@@ -25,7 +25,7 @@ export const translations = {
     pointsCount: 'نقطة',
 
     // Hero Section
-    heroBadge: 'مشروع تخرج أكاديمي لجامعة المستقبل الأهلية 2026',
+    heroBadge: 'الجامعة الوطنية الخاصة 2026',
     heroHeadlineStart: 'ابدأ رحلتك نحو',
     heroHeadlineEnd: 'احتراف تطوير الويب',
     heroSubtext: 'تعلم البرمجة بطريقة تفاعلية، طبّق ما تتعلمه مباشرة، واكتشف أخطاءك بمساعدة الذكاء الاصطناعي في بيئة جامعية تحاكي سوق العمل العالمي.',
@@ -105,7 +105,7 @@ export const translations = {
     repeatExerciseBtn: 'إعادة التطبيق',
     startLessonBtn: 'بدء الدرس',
     accreditationTitle: 'الاعتماد الأكاديمي للمقرر',
-    accreditationDesc: 'هذا المقرر جزء من متطلبات التخرج لكلية علوم الحاسب وهندسة البرمجيات بجامعة المستقبل الأهلية.',
+    accreditationDesc: 'هذا المقرر جزء من متطلبات التخرج لكلية علوم الحاسب وهندسة البرمجيات بالجامعة الوطنية الخاصة.',
     academicCredits: 'الساعات المعتمدة:',
     threeCreditHours: '3 ساعات أكاديمية',
     evaluationSystem: 'نظام التقييم:',
@@ -286,7 +286,7 @@ export const translations = {
     brandName: 'Educational Platform',
     brandSubtitle: 'WEB DEVELOPMENT LEARNING PLATFORM',
     brandTag: 'ACADEMIC',
-    universityTitle: 'Future University — Certified Capstone Project',
+    universityTitle: 'National Private University',
     demoMode: 'Demo Role:',
     demoStudent: 'Student',
     demoAdmin: 'Academic Admin',
@@ -305,7 +305,7 @@ export const translations = {
     pointsCount: 'Points',
 
     // Hero Section
-    heroBadge: 'Academic Capstone Project for Future University 2026',
+    heroBadge: 'National Private University 2026',
     heroHeadlineStart: 'Begin Your Journey to',
     heroHeadlineEnd: 'Mastering Web Development',
     heroSubtext: 'Learn programming interactively, test what you code instantly, and diagnose bugs with AI assistance in a university-grade environment built for the industry.',
@@ -385,7 +385,7 @@ export const translations = {
     repeatExerciseBtn: 'Retake Exercise',
     startLessonBtn: 'Start Lesson',
     accreditationTitle: 'Course Academic Accreditation',
-    accreditationDesc: 'This course is part of the graduation requirements for the Faculty of Computer Science & Software Engineering at Future University.',
+    accreditationDesc: 'This course is part of the graduation requirements for the Faculty of Computer Science & Software Engineering at National Private University.',
     academicCredits: 'Credit Hours:',
     threeCreditHours: '3 Credit Hours',
     evaluationSystem: 'Grading System:',

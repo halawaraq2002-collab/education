@@ -148,7 +148,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
                     <div className="bg-[#FAF8F2] border border-[#C6A34A]/30 p-2.5 rounded-lg flex items-center justify-between">
                       <div className="text-xs font-bold text-[#252B27]">
-                        {isAr ? 'جامعة المستقبل الأهلية' : 'Future University'}
+                        {isAr ? 'الجامعة الوطنية الخاصة' : 'National Private University'}
                       </div>
                       <div className="w-6 h-6 rounded-full bg-[#176B45] text-white flex items-center justify-center text-[10px] font-bold">
                         A+
@@ -490,7 +490,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     {isAr ? 'سارة القحطاني' : 'Sara Al-Qahtani'}
                   </h4>
                   <p className="text-[11px] text-[#747C76]">
-                    {isAr ? 'خريجة علوم حاسب — جامعة المستقبل الأهلية' : 'Computer Science Graduate — Future University'}
+                    {isAr ? 'خريجة علوم حاسب — الجامعة الوطنية الخاصة' : 'Computer Science Graduate — National Private University'}
                   </p>
                 </div>
               </div>
