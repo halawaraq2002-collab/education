@@ -9,6 +9,8 @@ export interface Lesson {
   duration: string;
   objective: string;
   explanation: string;
+  practicalSteps?: string;
+  videoSearchQuery?: string;
   starterHtml: string;
   starterCss: string;
   starterJs: string;
