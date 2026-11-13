@@ -166,7 +166,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         {isAr ? 'مساعد الذكاء الاصطناعي' : 'Gemini AI Assistant'}
                       </div>
                       <div className="text-[11px] text-[#747C76]">
-                        {isAr ? 'كودك سليم ومتوافق مع المعايير الأكاديمية!' : 'Syntax verified against W3C standards!'}
+                        {isAr ? 'كودك سليم ومتوافق مع المعايير العالمية!' : 'Syntax verified against W3C standards!'}
                       </div>
                     </div>
                   </div>
@@ -535,8 +535,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
                 {isAr
-                  ? '"أفضل منصة أكاديمية ساعدتني في إتقان تطوير الويب وبناء موقع حقيقي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."'
-                  : '"The best academic platform that guided me to master web development and build a production web application. Smooth progression from HTML to React."'}
+                  ? '"أفضل منصة تعليمية ساعدتني في إتقان تطوير الويب وبناء موقع حقيقي بجدارة. التدرج من HTML حتى React واضح وسلس للغاية."'
+                  : '"The best educational platform that guided me to master web development and build a production web application. Smooth progression from HTML to React."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#C6A34A] text-white font-bold flex items-center justify-center text-sm">
@@ -561,7 +561,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
               <p className="text-sm text-[#252B27] leading-relaxed italic">
                 {isAr
-                  ? '"نظام الاختبارات التفاعلية والدرجات الفورية يعطي حافزاً كبيراً للاستمرار وجمع النقاط والشارات الأكاديمية."'
+                  ? '"نظام الاختبارات التفاعلية والدرجات الفورية يعطي حافزاً كبيراً للاستمرار وجمع النقاط والشارات التعليمية."'
                   : '"The interactive quizzes and automated grading give immense motivation to study and earn honors badges."'}
               </p>
               <div className="pt-2 border-t border-gray-100 flex items-center gap-3">

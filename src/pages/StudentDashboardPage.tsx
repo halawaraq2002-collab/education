@@ -29,7 +29,7 @@ export const StudentDashboardPage: React.FC<StudentDashboardPageProps> = ({
 
   const profile = userProfile || {
     uid: 'guest',
-    displayName: isAr ? 'أحمد بن عبد الرحمن الأكاديمي' : 'Ahmed Al-Akademi',
+    displayName: isAr ? 'أحمد بن عبد الرحمن' : 'Ahmed Al-Mansour',
     email: 'student@university.edu.sa',
     academicId: 'CS-2026-8841',
     university: 'الجامعة الوطنية الخاصة',

@@ -90,15 +90,15 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
             </h1>
             <p className="text-sm text-[#747C76] mt-2 max-w-2xl leading-relaxed">
               {isAr
-                ? 'خطة دراسية متكاملة مقسمة إلى 3 مسارات رئيسية و 11 مستوى أكاديمي مع مشاريع عملية وتطبيقات برمجية في كل مرحلة.'
-                : 'A university curriculum divided into 3 specialized tracks and 11 progressive levels, with hands-on coding labs and real-world projects in every level.'}
+                ? 'خطة دراسية متكاملة مقسمة إلى 3 مسارات رئيسية و 11 مستوى تعليمي مع مشاريع عملية وتطبيقات برمجية في كل مرحلة.'
+                : 'A structured curriculum divided into 3 specialized tracks and 11 progressive levels, with hands-on coding labs and real-world projects in every level.'}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="text-center bg-[#E8F2EC] px-4 py-3 rounded-2xl border border-[#176B45]/20">
               <div className="text-xl font-black text-[#176B45]">{courses.length}</div>
-              <div className="text-[11px] font-semibold text-[#252B27]">{isAr ? 'مستويات دراسية' : 'Academic Levels'}</div>
+              <div className="text-[11px] font-semibold text-[#252B27]">{isAr ? 'مستويات دراسية' : 'Learning Levels'}</div>
             </div>
             <div className="text-center bg-[#FAF8F2] px-4 py-3 rounded-2xl border border-[#C6A34A]/30">
               <div className="text-xl font-black text-[#C6A34A]">3</div>

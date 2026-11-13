@@ -68,7 +68,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           <h3 className="text-xl font-bold font-['Cairo']">
-            {tab === 'login' && 'تسجيل الدخول الأكاديمي'}
+            {tab === 'login' && 'تسجيل الدخول'}
             {tab === 'register' && 'إنشاء ملف طالب جديد'}
             {tab === 'forgot' && 'استعادة كلمة المرور'}
           </h3>
@@ -143,7 +143,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             )}
 
             <div>
-              <label className="block text-xs font-bold text-[#252B27] mb-1">البريد الأكاديمي أو الشخصي:</label>
+              <label className="block text-xs font-bold text-[#252B27] mb-1">البريد الجامعي أو الشخصي:</label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-gray-400 absolute right-3 top-3" />
                 <input
@@ -240,7 +240,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 }}
                 className="flex-1 py-1.5 px-2 rounded-lg bg-[#C6A34A] text-white text-xs font-semibold hover:bg-[#a88636]"
               >
-                دخول كمشرف أكاديمي
+                دخول كمشرف تعليمي
               </button>
             </div>
           </div>

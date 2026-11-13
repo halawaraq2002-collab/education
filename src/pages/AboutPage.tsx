@@ -29,12 +29,12 @@ export const AboutPage: React.FC<{ setCurrentView: (view: string) => void }> = (
 
           <div className="pt-4 border-t border-gray-100 space-y-4 text-sm text-[#252B27] leading-relaxed text-start">
             <h3 className="font-bold text-[#176B45] text-base">
-              {language === 'ar' ? 'الرؤية والرسالة الأكاديمية:' : 'Academic Vision & Mission:'}
+              {language === 'ar' ? 'الرؤية والرسالة التعليمية:' : 'Educational Vision & Mission:'}
             </h3>
             <p>
               {language === 'ar'
-                ? 'تجسير الفجوة بين المقررات النظرية واحتياجات سوق العمل التقني المعاصر من خلال توفير بيئة برمجية تفاعلية مباشرة داخل المتصفح، مدعومة بتقنيات الذكاء الاصطناعي الأكاديمي، لتدريب الطلاب على منهجية التفكير التحليلي وحل المشكلات بدلاً من التلقين.'
-                : 'Bridging the gap between university theoretical curricula and modern software industry demands by providing an interactive in-browser development environment powered by pedagogical AI, training students in algorithmic problem-solving rather than rote memorization.'}
+                ? 'تجسير الفجوة بين المقررات النظرية واحتياجات سوق العمل التقني المعاصر من خلال توفير بيئة برمجية تفاعلية مباشرة داخل المتصفح، مدعومة بتقنيات الذكاء الاصطناعي التعليمي، لتدريب الطلاب على منهجية التفكير التحليلي وحل المشكلات بدلاً من التلقين.'
+                : 'Bridging the gap between theoretical curricula and modern software industry demands by providing an interactive in-browser development environment powered by pedagogical AI, training students in algorithmic problem-solving rather than rote memorization.'}
             </p>
 
             <h3 className="font-bold text-[#176B45] text-base pt-2">
@@ -53,7 +53,7 @@ export const AboutPage: React.FC<{ setCurrentView: (view: string) => void }> = (
                 <CheckCircle2 className="w-4 h-4 text-[#176B45] shrink-0" />
                 <span>
                   {language === 'ar'
-                    ? 'مرشد ذكاء اصطناعي أكاديمي يقدم التوجيه والتحليل دون حرق الحلول البرمجية.'
+                    ? 'مرشد ذكاء اصطناعي تعليمي يقدم التوجيه والتحليل دون حرق الحلول البرمجية.'
                     : 'Dedicated pedagogical AI assistant providing diagnostic hints without spoiling answers.'}
                 </span>
               </li>
@@ -61,7 +61,7 @@ export const AboutPage: React.FC<{ setCurrentView: (view: string) => void }> = (
                 <CheckCircle2 className="w-4 h-4 text-[#176B45] shrink-0" />
                 <span>
                   {language === 'ar'
-                    ? 'نظام تقييم واختبارات قياس معتمد بنقاط وشارات تميز أكاديمية.'
+                    ? 'نظام تقييم واختبارات قياس معتمد بنقاط وشارات تميز تعليمية.'
                     : 'Accredited assessment system with automated grading, instant feedback, and merit badges.'}
                 </span>
               </li>
@@ -69,8 +69,8 @@ export const AboutPage: React.FC<{ setCurrentView: (view: string) => void }> = (
                 <CheckCircle2 className="w-4 h-4 text-[#176B45] shrink-0" />
                 <span>
                   {language === 'ar'
-                    ? 'هوية بصرية أكاديمية راقية باللونين الأخضر والذهب الملكي للجامعات المرموقة.'
-                    : 'Prestigious academic visual identity featuring deep emerald green and royal gold.'}
+                    ? 'هوية بصرية راقية باللونين الأخضر والذهب الملكي للمؤسسات التعليمية المرموقة.'
+                    : 'Prestigious visual identity featuring deep emerald green and royal gold.'}
                 </span>
               </li>
             </ul>

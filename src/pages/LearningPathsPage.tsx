@@ -266,8 +266,8 @@ export const LearningPathsPage: React.FC<LearningPathsPageProps> = ({
           </h1>
           <p className="text-xs sm:text-sm text-[#747C76] max-w-3xl mx-auto leading-relaxed">
             {isAr
-              ? 'رحلة أكاديمية عملية منظمة في 11 مستوى و 3 مسارات رئيسية، لا تكتفي بتقديم المعلومات النظرية بل تتضمن تطبيقات عملية واختبارات ومشروعاً تطبيقياً في نهاية كل مرحلة.'
-              : 'A structured university learning path spanning 11 progressive levels across 3 core tracks, culminating in hands-on projects and a live deployed capstone website.'}
+              ? 'رحلة تعليمية عملية منظمة في 11 مستوى و 3 مسارات رئيسية، لا تكتفي بتقديم المعلومات النظرية بل تتضمن تطبيقات عملية واختبارات ومشروعاً تطبيقياً في نهاية كل مرحلة.'
+              : 'A structured learning path spanning 11 progressive levels across 3 core tracks, culminating in hands-on projects and a live deployed website.'}
           </p>
         </div>
 

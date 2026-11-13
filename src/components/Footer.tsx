@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, GraduationCap, Code2, Award, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { BookOpen, GraduationCap, Code2, Award, Heart } from 'lucide-react';
 
 interface FooterProps {
   setCurrentView: (view: string) => void;
@@ -9,7 +9,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
   return (
     <footer className="bg-[#1f2823] text-white pt-16 pb-12 border-t-4 border-[#C6A34A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-white/10">
           
           {/* Brand & Project Info */}
           <div className="space-y-4">
@@ -26,15 +26,15 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
               </div>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
-              منصة أكاديمية تفاعلية لتطوير الويب صُممت ونُفذت في الجامعة الوطنية الخاصة لتعكس أعلى معايير الجودة والتعليم التقني الحديث.
+              منصة تعليمية تفاعلية لتطوير الويب صُممت لتعكس أعلى معايير الجودة والتعليم التقني الحديث.
             </p>
             <div className="flex items-center gap-2 text-xs text-[#C6A34A] font-semibold">
               <Award className="w-4 h-4" />
-              <span>منصة جامعية معتمدة بمرتبة الشرف الأكاديمية</span>
+              <span>منصة جامعية معتمدة بمرتبة الشرف</span>
             </div>
           </div>
 
-          {/* Quick Academic Navigation */}
+          {/* Quick Educational Navigation */}
           <div>
             <h4 className="text-base font-bold text-[#C6A34A] mb-4 pb-2 border-b border-white/10">
               المقررات والمسارات
@@ -62,13 +62,13 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
               </li>
               <li>
                 <button onClick={() => setCurrentView('courses')} className="hover:text-white transition-colors cursor-pointer">
-                  مشروع التخرج الشامل للواجهات
+                  المشروع الشامل للواجهات
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Academic Features */}
+          {/* Educational Features */}
           <div>
             <h4 className="text-base font-bold text-[#C6A34A] mb-4 pb-2 border-b border-white/10">
               المزايا التعليمية
@@ -83,7 +83,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
               <li>
                 <span className="flex items-center gap-2 text-gray-300">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C6A34A]"></span>
-                  <span>مساعد الذكاء الاصطناعي الأكاديمي</span>
+                  <span>مساعد الذكاء الاصطناعي التعليمي</span>
                 </span>
               </li>
               <li>
@@ -101,27 +101,6 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             </ul>
           </div>
 
-          {/* Contact & University Info */}
-          <div>
-            <h4 className="text-base font-bold text-[#C6A34A] mb-4 pb-2 border-b border-white/10">
-              الاعتماد الأكاديمي
-            </h4>
-            <div className="space-y-3 text-sm text-gray-300">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#C6A34A] shrink-0 mt-1" />
-                <span>المملكة العربية السعودية، الجامعة الوطنية الخاصة، كلية علوم الحاسب</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#C6A34A] shrink-0" />
-                <span className="font-mono text-xs">cs-graduation@national-university.edu.sa</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#C6A34A] shrink-0" />
-                <span className="font-mono text-xs">+966 11 456 7890</span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         {/* Bottom copyright */}
@@ -130,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentView }) => {
             © 2026 جميع الحقوق محفوظة لـ <strong className="text-white font-medium">منصة تعليمية</strong> — الجامعة الوطنية الخاصة.
           </p>
           <div className="flex items-center gap-1 text-gray-400">
-            <span>صُنعت بشغف وأناقة أكاديمية</span>
+            <span>صُنعت بشغف وإتقان</span>
             <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400 inline" />
             <span>لطلاب هندسة البرمجيات</span>
           </div>

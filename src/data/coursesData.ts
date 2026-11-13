@@ -363,7 +363,7 @@ console.log("بيئة محاكاة شبكة الويب جاهزة للاختبا
 3. واجهات برمجة التطبيقات (APIs): تجهيز البيانات بصيغة JSON لتبادلها مع الواجهة الأمامية.
 
 • التمرين التطبيقي العملي:
-1. عاين بطاقة "بوابة الطالب الأكاديمية" في المعاينة.
+1. عاين بطاقة "بوابة الطالب التعليمية" في المعاينة.
 2. اضغط زر "جلب المقررات المسجلة من خادم الـ API".
 3. راقب كيف تستقبل الجافاسكريبت مصفوفة الـ JSON وترسم بطاقات الواجهة فوراً.
 4. أضف مقرراً جديداً إلى مصفوفة backendDatabase في ملف main.js واضغط "تشغيل الكود".`,
@@ -1133,7 +1133,7 @@ sendHttpBtn.addEventListener('click', function() {
       statusBadge.style.color = "#4ade80";
       statusBadge.style.background = "rgba(74, 222, 128, 0.1)";
       headersView.textContent = "HTTP/1.1 201 Created\\nLocation: /api/students/enroll/982\\nContent-Type: application/json";
-      payloadView.textContent = JSON.stringify({ success: true, message: "تم تسجيل المقرر بنجاح في خطتك الأكاديمية" }, null, 2);
+      payloadView.textContent = JSON.stringify({ success: true, message: "تم تسجيل المقرر بنجاح في خطتك الدراسية" }, null, 2);
     } else {
       statusBadge.textContent = "200 OK";
       statusBadge.style.color = "#4ade80";
@@ -1802,7 +1802,7 @@ console.log("مختبر أدوات المطور DevTools جاهز للفحص و�
     </article>
   </main>
 
-  <!-- التذييل الأكاديمي -->
+  <!-- التذييل التعليمي -->
   <footer>
     <p>© 2026 جميع الحقوق محفوظة للجامعة الوطنية الخاصة</p>
   </footer>
@@ -1876,7 +1876,7 @@ footer { margin-top: 25px; text-align: center; font-size: 12px; color: #747C76; 
       description: 'بناء واجهة صفحة رئيسية كاملة تحتوي على شريط علوي، بطاقات خدمات، معرض، ونموذج اشتراك أنيق.',
       descriptionEn: 'Code a full corporate landing page featuring hero banner, service cards, hover states, and CSS grid gallery.'
     },
-    overview: 'إتقان تنسيق صفحات الويب وتحويل كود HTML المجرد إلى واجهات استخدام تفاعلية مبهرة تعكس الهوية الأكاديمية الراقية باللونين الأخضر الزمردي والذهب الملكي.',
+    overview: 'إتقان تنسيق صفحات الويب وتحويل كود HTML المجرد إلى واجهات استخدام تفاعلية مبهرة تعكس الهوية الراقية باللونين الأخضر الزمردي والذهب الملكي.',
     learningObjectives: [
       'فهم نموذج الصندوق (Box Model) والتحكم في الهوامش والحشوات (Margin & Padding).',
       'إتقان تقنية الـ Flexbox لبناء أشرطة التصفح ومحاذاة العناصر بدقة.',
@@ -1920,7 +1920,7 @@ footer { margin-top: 25px; text-align: center; font-size: 12px; color: #747C76; 
   </div>
   <div class="academic-card">
     <div class="card-icon">🤖</div>
-    <h3>المرشد الأكاديمي الذكي</h3>
+    <h3>المرشد التعليمي الذكي</h3>
     <p>مساعد ذكاء اصطناعي يقدم تلميحات توجيهية ويحلل أخطاء البرمجة خطوة بخطوة.</p>
     <button class="btn">جرب المساعد</button>
   </div>
@@ -2054,7 +2054,7 @@ p { color: #747C76; font-size: 14px; line-height: 1.6; }
             starterHtml: `<div class="todo-app">
   <h2>قائمة المهام الدراسية 📝</h2>
   <div class="input-group">
-    <input type="text" id="taskInput" placeholder="أدخل اسم المهمة الأكاديمية الجديدة...">
+    <input type="text" id="taskInput" placeholder="أدخل اسم المهمة الجديدة...">
     <button id="addBtn">إضافة مهمة</button>
   </div>
   <ul id="taskList">
@@ -2303,7 +2303,7 @@ p { color: #747C76; font-size: 14px; line-height: 1.6; }
     practicalProject: {
       title: 'تهيئة مستودع على GitHub ورفع مشروع مع ملف README',
       titleEn: 'Setting up a GitHub Repository & Open Source Release',
-      description: 'إنشاء Repository حقيقي، إنشاء فرع feature-branch، دمج التعديلات، وكتابة توثيق README أكاديمي احترافي.',
+      description: 'إنشاء Repository حقيقي، إنشاء فرع feature-branch، دمج التعديلات، وكتابة توثيق README احترافي.',
       descriptionEn: 'Create a local repository, stage commits, create feature branches, resolve merge, and draft a markdown README.'
     },
     overview: 'المهارة الإلزامية لكل مبرمج في سوق العمل البرمجي المعاصر. يتعلم الطالب كيفية تتبع تاريخ التعديلات، وحفظ نقاط استعادة للمشروع، والعمل الجماعي بإنشاء الفروع (Branches) وإرسال طلبات السحب (Pull Requests).',
@@ -2451,8 +2451,8 @@ p { color: #747C76; font-size: 14px; line-height: 1.6; }
             moduleIndex: 1,
             moduleTitle: 'المكونات وإدارة الحالة بالـ Hooks',
             moduleTitleEn: 'Components & State Management with Hooks',
-            title: 'بناء مكون عداد الإنجاز الأكاديمي مع useState',
-            titleEn: 'Building an Academic Progress Counter with useState',
+            title: 'بناء مكون عداد الإنجاز مع useState',
+            titleEn: 'Building a Progress Counter with useState',
             duration: '60 دقيقة',
             objective: 'صمم مكوناً تفاعلياً يحاكي دورة حياة مكونات React وتحديث الحالة التلقائي.',
             explanation: `
@@ -2462,7 +2462,7 @@ p { color: #747C76; font-size: 14px; line-height: 1.6; }
             `,
             starterHtml: `<div class="react-component">
   <div class="badge">React Component Simulation</div>
-  <h2>مقياس إنجاز الساعات الأكاديمية 🎓</h2>
+  <h2>مقياس إنجاز الساعات التعليمية 🎓</h2>
   <div class="progress-box">
     <div class="progress-bar" id="progressBar" style="width: 25%;"></div>
   </div>
@@ -2790,10 +2790,10 @@ sendBtn.addEventListener('click', () => {
 في قواعد البيانات العلائقية (RDBMS):
 - جدول students يحتوي على بيانات الطالب ومفتاح أساسي (student_id).
 - جدول enrollments يربط الطالب بالمقرر بواسطة مفتاح أجنبي (foreign key).
-- باستخدام INNER JOIN ندمج السجلات المطابقة لنحصل على تقرير أكاديمي شامل.
+- باستخدام INNER JOIN ندمج السجلات المطابقة لنحصل على تقرير دراسي شامل.
             `,
             starterHtml: `<div class="sql-studio">
-  <h3>محرر استعلامات SQL الأكاديمي 🗄️</h3>
+  <h3>محرر استعلامات SQL التفاعلي 🗄️</h3>
   <div class="sql-editor">
     <code>SELECT s.name, c.title, e.grade 
 FROM students s
@@ -2806,7 +2806,7 @@ WHERE e.grade >= 90;</code>
     <h4>النتائج المسترجعة (Query Result):</h4>
     <table id="sqlTable">
       <thead>
-        <tr><th>اسم الطالب</th><th>المقرر الأكاديمي</th><th>الدرجة</th></tr>
+        <tr><th>اسم الطالب</th><th>المقرر التعليمي</th><th>الدرجة</th></tr>
       </thead>
       <tbody>
         <tr><td>أحمد عبد الرحمن</td><td>أساسيات HTML5</td><td>95</td></tr>
@@ -3073,7 +3073,7 @@ deployBtn.addEventListener('click', () => {
     levelEn: 'Advanced',
     duration: '35 ساعة',
     totalLessons: 16,
-    category: 'مشروع التخرج الأكاديمي',
+    category: 'المشروع النهائي الشامل',
     iconName: 'GraduationCap',
     color: '#C6A34A',
     imageUrl: '/src/assets/images/capstone_course_art_1793989838051.jpg',
@@ -3081,7 +3081,7 @@ deployBtn.addEventListener('click', () => {
     levelNumber: 11,
     practicalProject: {
       title: 'تطوير منصة تعليمية إلكترونية متكاملة ونشرها على الإنترنت',
-      titleEn: 'Developing & Deploying a Complete Academic E-Learning Platform',
+      titleEn: 'Developing & Deploying a Complete E-Learning Platform',
       description: 'بناء منصة تعليمية كاملة تحتوي على تسجيل مستخدمين، عرض مواد، محرر أكواد تفاعلي، ومساعد ذكاء اصطناعي.',
       descriptionEn: 'Build and deploy a full-stack educational portal with user auth, course catalog, live IDE, and AI debugger.'
     },
@@ -3094,15 +3094,15 @@ deployBtn.addEventListener('click', () => {
     ],
     modules: [
       {
-        title: 'الوحدة الختامية: بناء لوحة معلومات أكاديمية متكاملة',
-        titleEn: 'Capstone: Integrated Academic Dashboard',
+        title: 'الوحدة الختامية: بناء لوحة معلومات تعليمية متكاملة',
+        titleEn: 'Capstone: Integrated Educational Dashboard',
         lessons: [
           {
             id: 'cap-1',
             courseId: 'frontend-fullstack',
             moduleIndex: 1,
-            moduleTitle: 'الوحدة الختامية: بناء لوحة معلومات أكاديمية متكاملة',
-            moduleTitleEn: 'Capstone: Integrated Academic Dashboard',
+            moduleTitle: 'الوحدة الختامية: بناء لوحة معلومات تعليمية متكاملة',
+            moduleTitleEn: 'Capstone: Integrated Educational Dashboard',
             title: 'تطوير لوحة مؤشرات أداء الطالب الحية (KPI Dashboard)',
             titleEn: 'Engineering a Real-Time Student Analytics Dashboard',
             duration: '90 دقيقة',
@@ -3127,7 +3127,7 @@ deployBtn.addEventListener('click', () => {
   <main class="content">
     <header class="topbar">
       <h2>مرحباً بك، م. سارة القحطاني</h2>
-      <span class="status">🟢 متصل بالنظام الأكاديمي</span>
+      <span class="status">🟢 متصل بالنظام التعليمي</span>
     </header>
 
     <div class="kpi-grid">
@@ -3140,7 +3140,7 @@ deployBtn.addEventListener('click', () => {
         <span class="val text-gold">3.95</span>
       </div>
       <div class="kpi-card">
-        <span class="label">النقاط الأكاديمية</span>
+        <span class="label">النقاط التعليمية</span>
         <span class="val text-green" id="valPoints">1,250</span>
       </div>
     </div>
@@ -3240,7 +3240,7 @@ btn.addEventListener('click', () => {
   pointsVal.textContent = '1,500 (+250)';
   console.log("تهانينا! لقد اجتزت مناقشة المشروع النهائي بامتياز.");
 });`,
-            expectedOutputHint: 'اضغط على زر "تسليم ومناقشة المشروع" لمشاهدة التفاعل الحي مع التقييم الأكاديمي.'
+            expectedOutputHint: 'اضغط على زر "تسليم ومناقشة المشروع" لمشاهدة التفاعل الحي مع التقييم النهائي.'
           }
         ]
       }

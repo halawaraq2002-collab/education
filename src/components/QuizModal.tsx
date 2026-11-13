@@ -116,11 +116,11 @@ export const QuizModal: React.FC<QuizModalProps> = ({
                 )}
                 <div>
                   <h4 className="font-bold text-base">
-                    {passed ? 'تهانينا! لقد اجتزت الاختبار الأكاديمي بنجاح' : 'لم تحقق درجة النجاح المطلوبة'}
+                    {passed ? 'تهانينا! لقد اجتزت الاختبار بنجاح' : 'لم تحقق درجة النجاح المطلوبة'}
                   </h4>
                   <p className="text-xs mt-0.5 opacity-90">
                     {passed
-                      ? 'تم تسجيل الدرجة في سجلك الأكاديمي وإضافة نقاط الإنجاز.'
+                      ? 'تم تسجيل الدرجة في سجلك وإضافة نقاط الإنجاز.'
                       : 'يمكنك مراجعة الأخطاء أدناه والمحاولة مرة أخرى لرفع معدلك.'}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
                     <div className="mt-3.5 pr-8 text-xs bg-white p-3 rounded-lg border border-gray-200 text-gray-700 leading-relaxed flex items-start gap-2">
                       <HelpCircle className="w-4 h-4 text-[#C6A34A] shrink-0 mt-0.5" />
                       <div>
-                        <strong className="text-[#176B45]">التفسير الأكاديمي: </strong>
+                        <strong className="text-[#176B45]">التفسير العلمي: </strong>
                         <span>{q.explanation}</span>
                       </div>
                     </div>

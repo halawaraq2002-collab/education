@@ -30,7 +30,7 @@ interface AuthContextType {
 const defaultDemoStudent: UserProfile = {
   uid: 'demo-student-id',
   email: 'student@university.edu.sa',
-  displayName: 'أحمد بن عبد الرحمن الأكاديمي',
+  displayName: 'أحمد بن عبد الرحمن',
   role: 'student',
   academicId: 'CS-2026-8841',
   university: 'الجامعة الوطنية الخاصة',
@@ -45,7 +45,7 @@ const defaultDemoStudent: UserProfile = {
 const defaultDemoAdmin: UserProfile = {
   uid: 'demo-admin-id',
   email: 'halawaraq2002@gmail.com',
-  displayName: 'د. عبد الله المنصور (مشرف أكاديمي)',
+  displayName: 'د. عبد الله المنصور (مشرف تعليمي)',
   role: 'admin',
   academicId: 'FACULTY-001',
   university: 'الجامعة الوطنية الخاصة - عمادة تقنية المعلومات',
@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const newProfile: UserProfile = {
               uid: currentUser.uid,
               email: currentUser.email || '',
-              displayName: currentUser.displayName || (language === 'ar' ? 'طالب أكاديمي' : 'Academic Scholar'),
+              displayName: currentUser.displayName || (language === 'ar' ? 'طالب' : 'Student'),
               role: isAdminEmail ? 'admin' : 'student',
               academicId: `STU-${Math.floor(100000 + Math.random() * 900000)}`,
               university: 'الجامعة الوطنية الخاصة',
@@ -143,7 +143,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUserProfile({
             uid: currentUser.uid,
             email: currentUser.email || '',
-            displayName: currentUser.displayName || 'طالب أكاديمي',
+            displayName: currentUser.displayName || 'طالب',
             role: currentUser.email === 'halawaraq2002@gmail.com' ? 'admin' : 'student',
             academicId: `STU-2026`,
             university: 'الجامعة الوطنية الخاصة',

@@ -27,7 +27,7 @@ interface MockStudent {
 }
 
 const mockStudentsList: MockStudent[] = [
-  { id: '1', name: 'أحمد بن عبد الرحمن الأكاديمي', academicId: 'CS-2026-8841', email: 'student@university.edu.sa', enrolledCourse: 'أساسيات HTML5 وبنية الويب', progress: 85, gpa: '3.92', status: 'نشط' },
+  { id: '1', name: 'أحمد بن عبد الرحمن', academicId: 'CS-2026-8841', email: 'student@university.edu.sa', enrolledCourse: 'أساسيات HTML5 وبنية الويب', progress: 85, gpa: '3.92', status: 'نشط' },
   { id: '2', name: 'سارة بنت محمد القحطاني', academicId: 'CS-2026-9012', email: 'sara.q@university.edu.sa', enrolledCourse: 'مشروع التخرج: تطوير الواجهات', progress: 100, gpa: '3.98', status: 'متخرج' },
   { id: '3', name: 'خالد بن فيصل الدوسري', academicId: 'CS-2026-7731', email: 'khalid.d@university.edu.sa', enrolledCourse: 'برمجة جافاسكريبت المتقدمة', progress: 60, gpa: '3.45', status: 'نشط' },
   { id: '4', name: 'ريم بنت عبد العزيز الشمري', academicId: 'CS-2026-8190', email: 'reem.sh@university.edu.sa', enrolledCourse: 'تنسيق الصفحات والتصميم المتجاوب', progress: 92, gpa: '3.88', status: 'نشط' },
@@ -97,8 +97,8 @@ export const AdminDashboardPage: React.FC = () => {
       id: newId,
       title: newCourseForm.titleAr,
       titleEn: newCourseForm.titleEn || newCourseForm.titleAr,
-      shortDescription: newCourseForm.descriptionAr || 'مقرر دراسي جديد تم اعتماده من العمادة الأكاديمية.',
-      shortDescriptionEn: newCourseForm.descriptionEn || 'New academic course accredited by deanship.',
+      shortDescription: newCourseForm.descriptionAr || 'مقرر دراسي جديد تم إضافته إلى المنصة التعليمية.',
+      shortDescriptionEn: newCourseForm.descriptionEn || 'New educational course added to the platform.',
       level: newCourseForm.level,
       levelEn: newCourseForm.levelEn,
       duration: newCourseForm.duration,
@@ -110,7 +110,7 @@ export const AdminDashboardPage: React.FC = () => {
       overview: newCourseForm.descriptionAr || 'نظرة عامة على المقرر التخصصي الجديد.',
       learningObjectives: [
         newCourseForm.firstLessonObjective,
-        'إتقان المهارات العملية والأكاديمية للمقرر',
+        'إتقان المهارات العملية والعلمية للمقرر',
         'تطبيق مشروع برمجي متكامل في نهاية المسار',
       ],
       modules: [
@@ -129,7 +129,7 @@ export const AdminDashboardPage: React.FC = () => {
               duration: '30 دقيقة',
               objective: newCourseForm.firstLessonObjective,
               explanation: 'ابدأ بكتابة كودك الأول وجرب النتائج في بيئة التطوير المباشرة.',
-              starterHtml: `<h1>${newCourseForm.titleAr}</h1>\n<p>مرحباً بك في المقرر الأكاديمي الجديد.</p>`,
+              starterHtml: `<h1>${newCourseForm.titleAr}</h1>\n<p>مرحباً بك في المقرر التعليمي الجديد.</p>`,
               starterCss: 'body { font-family: sans-serif; padding: 24px; color: #176B45; }',
               starterJs: 'console.log("المقرر جاهز للتعلم!");',
               expectedOutputHint: 'جرب تعديل الكود واضغط تشغيل لرؤية النتيجة.',
@@ -140,8 +140,8 @@ export const AdminDashboardPage: React.FC = () => {
       quiz: {
         id: `quiz-${newId}`,
         courseId: newId,
-        title: `اختبار التحصيل الأكاديمي: ${newCourseForm.titleAr}`,
-        titleEn: `Academic Exam: ${newCourseForm.titleEn || newCourseForm.titleAr}`,
+        title: `اختبار التحصيل العلمي: ${newCourseForm.titleAr}`,
+        titleEn: `Course Exam: ${newCourseForm.titleEn || newCourseForm.titleAr}`,
         passingScore: 70,
         questions: [
           {
@@ -161,7 +161,7 @@ export const AdminDashboardPage: React.FC = () => {
               'No specific objective',
             ],
             correctIndex: 0,
-            explanation: 'التطبيق العملي واكتساب المهارات الواقعية هو جوهر المناهج الأكاديمية الحديثة.',
+            explanation: 'التطبيق العملي واكتساب المهارات الواقعية هو جوهر المناهج التعليمية الحديثة.',
           },
         ],
       },
@@ -325,11 +325,11 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h3 className="text-lg font-bold text-[#176B45]">
-                  {language === 'ar' ? 'إدارة المقررات والمناهج الأكاديمية' : 'Course & Curriculum Management'}
+                  {language === 'ar' ? 'إدارة المقررات والمناهج التعليمية' : 'Course & Curriculum Management'}
                 </h3>
                 <p className="text-xs text-[#747C76]">
                   {language === 'ar'
-                    ? 'صلاحيات كاملة للمشرف الأكاديمي لإضافة مواد جديدة، تحديث الدروس، أو حذف المقررات.'
+                    ? 'صلاحيات كاملة للمشرف التعليمي لإضافة مواد جديدة، تحديث الدروس، أو حذف المقررات.'
                     : 'Full administrative authority to create new subjects, update syllabus, and manage courses.'}
                 </p>
               </div>
@@ -459,7 +459,7 @@ export const AdminDashboardPage: React.FC = () => {
                               ? 'bg-green-100 text-green-800'
                               : 'bg-yellow-100 text-yellow-800'
                           }`}
-                          title={language === 'ar' ? 'انقر لتبديل الحالة الأكاديمية' : 'Click to toggle academic status'}
+                          title={language === 'ar' ? 'انقر لتبديل الحالة' : 'Click to toggle status'}
                         >
                           {s.status} ↺
                         </button>
@@ -477,7 +477,7 @@ export const AdminDashboardPage: React.FC = () => {
         {activeTab === 'quizzes' && (
           <div className="bg-white rounded-3xl border border-[#dbe6df] shadow-xs p-6 space-y-6 text-start">
             <h3 className="text-lg font-bold text-[#176B45]">
-              {language === 'ar' ? 'بنك الاختبارات الأكاديمية ومعايير النجاح' : 'Academic Quiz Bank & Passing Criteria'}
+              {language === 'ar' ? 'بنك الاختبارات التعليمية ومعايير النجاح' : 'Educational Quiz Bank & Passing Criteria'}
             </h3>
 
             <div className="space-y-4">
@@ -512,18 +512,18 @@ export const AdminDashboardPage: React.FC = () => {
         {activeTab === 'analytics' && (
           <div className="bg-white rounded-3xl border border-[#dbe6df] shadow-xs p-6 space-y-6 text-start">
             <h3 className="text-lg font-bold text-[#176B45]">
-              {language === 'ar' ? 'مؤشرات الجودة والاعتماد الأكاديمي لمشروع التخرج' : 'Quality & Accreditation Metrics'}
+              {language === 'ar' ? 'مؤشرات الجودة والاعتماد التعليمي' : 'Quality & Accreditation Metrics'}
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div className="p-5 rounded-2xl bg-[#FAF8F2] border border-[#C6A34A]/30 space-y-3">
                 <h4 className="font-bold text-[#176B45]">
-                  {language === 'ar' ? 'معايير تقييم لجنة المناقشة الأكاديمية:' : 'Faculty Committee Evaluation Standards:'}
+                  {language === 'ar' ? 'معايير الجودة والتقييم التعليمية:' : 'Quality & Evaluation Standards:'}
                 </h4>
                 <ul className="space-y-2 text-xs text-[#252B27]">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#176B45]" />
-                    <span>{language === 'ar' ? 'الهوية البصرية الأكاديمية الموحدة (الأخضر الملكي والذهب)' : 'Unified academic visual identity (Royal Green & Gold)'}</span>
+                    <span>{language === 'ar' ? 'الهوية البصرية الموحدة (الأخضر الملكي والذهب)' : 'Unified visual identity (Royal Green & Gold)'}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-[#176B45]" />
@@ -550,11 +550,11 @@ export const AdminDashboardPage: React.FC = () => {
                 </h4>
                 <p className="text-xs text-[#252B27] leading-relaxed">
                   {language === 'ar'
-                    ? 'تم استيفاء جميع المتطلبات الوظيفية والتقنية للمشروع بنجاح، وهو مرشح لنيل مرتبة الشرف الأولى في مسابقة مشاريع التخرج الجامعية.'
-                    : 'All functional, pedagogical, and technical capstone requirements are fulfilled with distinction.'}
+                    ? 'تم استيفاء جميع المتطلبات الوظيفية والتقنية للمنصة التعليمية بنجاح وفق أعلى المعايير الحديثة.'
+                    : 'All functional, pedagogical, and technical requirements are fulfilled with distinction.'}
                 </p>
                 <div className="text-xs font-bold text-[#176B45] pt-2">
-                  {language === 'ar' ? 'ختم الاعتماد الأكاديمي: ✔️ معتمد لعام 2026' : 'Academic Seal: ✔️ Accredited 2026'}
+                  {language === 'ar' ? 'ختم الاعتماد التعليمي: ✔️ معتمد لعام 2026' : 'Quality Seal: ✔️ Accredited 2026'}
                 </div>
               </div>
             </div>
@@ -728,7 +728,7 @@ export const AdminDashboardPage: React.FC = () => {
                   required
                   value={newCourseForm.descriptionAr}
                   onChange={(e) => setNewCourseForm({ ...newCourseForm, descriptionAr: e.target.value })}
-                  placeholder="وصف مختصر لمحتوى المقرر وأهميته الأكاديمية..."
+                  placeholder="وصف مختصر لمحتوى المقرر وأهميته التعليمية..."
                   className="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:border-[#176B45] outline-hidden"
                 />
               </div>
